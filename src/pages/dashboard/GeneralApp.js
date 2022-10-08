@@ -19,6 +19,9 @@ import {
 } from "phosphor-react";
 import { faker } from "@faker-js/faker";
 
+import NoChat from "../../assets/Images/Illustration/no-chat.svg";
+import { Link } from "react-router-dom";
+
 const truncateText = (string, n) => {
   return string.length > n ? `${string.slice(0, n)}...` : string;
 };
@@ -106,16 +109,19 @@ const ChatElement = ({ img, name, msg, time, unread, online }) => {
         alignItems={"center"}
         justifyContent="space-between"
       >
-        <Stack direction="row" spacing={2}> {
-          online ?<StyledBadge
-          overlap="circular"
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          variant="dot"
-        >
-          <Avatar alt={name} src={img} />
-        </StyledBadge> : <Avatar alt={name} src={img} />
-        }
-          
+        <Stack direction="row" spacing={2}>
+          {" "}
+          {online ? (
+            <StyledBadge
+              overlap="circular"
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              variant="dot"
+            >
+              <Avatar alt={name} src={img} />
+            </StyledBadge>
+          ) : (
+            <Avatar alt={name} src={img} />
+          )}
           <Stack spacing={0.3}>
             <Typography variant="subtitle2">{name}</Typography>
             <Typography variant="caption">{truncateText(msg, 20)}</Typography>
@@ -198,7 +204,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 const GeneralApp = () => {
   return (
     <>
-      <Stack direction="row">
+      <Stack direction="row" sx={{ width: "100%" }}>
         <Box sx={{ height: "100%", width: 320, backgroundColor: "#F8FAFF" }}>
           <Stack p={3} spacing={2}>
             <Stack
@@ -243,6 +249,29 @@ const GeneralApp = () => {
             {ChatList.filter((el) => !el.pinned).map((el, idx) => {
               return <ChatElement {...el} />;
             })}
+          </Stack>
+        </Box>
+        <Box
+          sx={{
+            height: "100%",
+            width: "calc(100vw - 420px)",
+            backgroundColor: "#FFF",
+            borderBottom: "6px solid #5B96F7",
+          }}
+        >
+          <Stack
+            spacing={2}
+            sx={{ height: "100%", width: "100%" }}
+            alignItems="center"
+            justifyContent={"center"}
+          >
+            <img src={NoChat} alt="No conversation" />
+            <Typography variant="subtitle2">
+              Select a conversation or start a{" "}
+              <Link style={{ color: "#5B96F7", textDecoration: "none" }} to="/">
+                new one
+              </Link>
+            </Typography>
           </Stack>
         </Box>
       </Stack>
