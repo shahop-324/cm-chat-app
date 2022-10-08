@@ -84,7 +84,14 @@ const DashboardLayout = () => {
   return (
     <>
       <Stack direction="row">
-        <Box sx={{ height: "100vh", width: 100, backgroundColor: "#F0F4FA" }}>
+        <Box
+          sx={{
+            height: "100vh",
+            width: 100,
+            backgroundColor: "#F0F4FA",
+            boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+          }}
+        >
           <Stack
             py={3}
             alignItems={"center"}

@@ -10,21 +10,36 @@ import {
   Button,
   Badge,
   Avatar,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 import {
   ArchiveBox,
   CaretDown,
   CircleDashed,
   MagnifyingGlass,
+  Phone,
+  VideoCamera,
+  Smiley,
+  LinkSimple,
+  PaperPlaneTilt,
 } from "phosphor-react";
 import { faker } from "@faker-js/faker";
 
 import NoChat from "../../assets/Images/Illustration/no-chat.svg";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import Conversation from "./Conversation";
 
 const truncateText = (string, n) => {
   return string.length > n ? `${string.slice(0, n)}...` : string;
 };
+
+const StyledInput = styled(TextField)(({ theme }) => ({
+  "& .MuiInputBase-input": {
+    paddingTop: "12px !important",
+    paddingBottom: "12px !important",
+  },
+}));
 
 const ChatList = [
   {
@@ -202,10 +217,19 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 const GeneralApp = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   return (
     <>
       <Stack direction="row" sx={{ width: "100%" }}>
-        <Box sx={{ height: "100%", width: 320, backgroundColor: "#F8FAFF" }}>
+        <Box
+          sx={{
+            height: "100%",
+            width: 320,
+            backgroundColor: "#F8FAFF",
+            boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+          }}
+        >
           <Stack p={3} spacing={2}>
             <Stack
               alignItems={"center"}
@@ -256,23 +280,152 @@ const GeneralApp = () => {
             height: "100%",
             width: "calc(100vw - 420px)",
             backgroundColor: "#FFF",
-            borderBottom: "6px solid #5B96F7",
+            borderBottom:
+              searchParams.get("type") === "individual-chat" &&
+              searchParams.get("id")
+                ? "0px"
+                : "6px solid #5B96F7",
           }}
         >
-          <Stack
-            spacing={2}
-            sx={{ height: "100%", width: "100%" }}
-            alignItems="center"
-            justifyContent={"center"}
-          >
-            <img src={NoChat} alt="No conversation" />
-            <Typography variant="subtitle2">
-              Select a conversation or start a{" "}
-              <Link style={{ color: "#5B96F7", textDecoration: "none" }} to="/">
-                new one
-              </Link>
-            </Typography>
-          </Stack>
+          {searchParams.get("type") === "individual-chat" &&
+          searchParams.get("id") ? (
+            <Stack height={"100%"}>
+              <Box
+                p={2}
+                width={"100%"}
+                sx={{
+                  backgroundColor: "#F8FAFF",
+                  boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+                }}
+              >
+                <Stack
+                  alignItems={"center"}
+                  direction={"row"}
+                  sx={{ width: "100%", height: "100%" }}
+                  justifyContent="space-between"
+                >
+                  <Stack spacing={2} direction="row">
+                    <Box>
+                      <StyledBadge
+                        overlap="circular"
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right",
+                        }}
+                        variant="dot"
+                      >
+                        <Avatar
+                          alt={faker.name.fullName()}
+                          src={faker.image.avatar()}
+                        />
+                      </StyledBadge>
+                    </Box>
+                    <Stack spacing={0.2}>
+                      <Typography variant="subtitle2">
+                        {faker.name.fullName()}
+                      </Typography>
+                      <Typography variant="caption">Online</Typography>
+                    </Stack>
+                  </Stack>
+                  <Stack direction={"row"} alignItems="center" spacing={3}>
+                    <IconButton>
+                      <VideoCamera />
+                    </IconButton>
+                    <IconButton>
+                      <Phone />
+                    </IconButton>
+                    <IconButton>
+                      <MagnifyingGlass />
+                    </IconButton>
+
+                    <Divider orientation="vertical" flexItem />
+                    <IconButton>
+                      <CaretDown />
+                    </IconButton>
+                  </Stack>
+                </Stack>
+              </Box>
+              <Box
+                height={"100%"}
+                width={"100%"}
+                sx={{
+                  backgroundColor: "#F0F4FA",
+                  boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+                }}
+              >
+                <Conversation />
+              </Box>
+              <Box
+                p={2}
+                width={"100%"}
+                sx={{
+                  backgroundColor: "#F8FAFF",
+                  boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+                }}
+              >
+                <Stack direction="row" alignItems={"center"} spacing={3}>
+                  <StyledInput
+                    fullWidth
+                    placeholder="Write a message..."
+                    variant="filled"
+                    InputProps={{
+                      disableUnderline: true,
+                      startAdornment: (
+                        <InputAdornment>
+                          <IconButton>
+                            <LinkSimple color="#5B96F7" />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment>
+                          <IconButton>
+                            <Smiley color="#5B96F7" />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      height: 48,
+                      width: 48,
+                      backgroundColor: "#5B96F7",
+                      borderRadius: 1.5,
+                    }}
+                  >
+                    <Stack
+                      sx={{ height: "100%" }}
+                      alignItems={"center"}
+                      justifyContent="center"
+                    >
+                      <IconButton>
+                        <PaperPlaneTilt color="#ffffff" />
+                      </IconButton>
+                    </Stack>
+                  </Box>
+                </Stack>
+              </Box>
+            </Stack>
+          ) : (
+            <Stack
+              spacing={2}
+              sx={{ height: "100%", width: "100%" }}
+              alignItems="center"
+              justifyContent={"center"}
+            >
+              <img src={NoChat} alt="No conversation" />
+              <Typography variant="subtitle2">
+                Select a conversation or start a{" "}
+                <Link
+                  style={{ color: "#5B96F7", textDecoration: "none" }}
+                  to="/"
+                >
+                  new one
+                </Link>
+              </Typography>
+            </Stack>
+          )}
         </Box>
       </Stack>
     </>
