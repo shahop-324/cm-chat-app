@@ -29,6 +29,7 @@ import { faker } from "@faker-js/faker";
 import NoChat from "../../assets/Images/Illustration/no-chat.svg";
 import { Link, useSearchParams } from "react-router-dom";
 import Conversation from "./Conversation";
+import Scrollbar, { SimpleBarStyle } from "../../components/Scrollbar";
 
 const truncateText = (string, n) => {
   return string.length > n ? `${string.slice(0, n)}...` : string;
@@ -77,6 +78,33 @@ const ChatList = [
     unread: 0,
     pinned: false,
     online: true,
+  },
+  {
+    img: faker.image.avatar(),
+    name: faker.name.firstName(),
+    msg: faker.music.songName(),
+    time: "08:42",
+    unread: 0,
+    pinned: false,
+    online: false,
+  },
+  {
+    img: faker.image.avatar(),
+    name: faker.name.firstName(),
+    msg: faker.music.songName(),
+    time: "08:42",
+    unread: 0,
+    pinned: false,
+    online: false,
+  },
+  {
+    img: faker.image.avatar(),
+    name: faker.name.firstName(),
+    msg: faker.music.songName(),
+    time: "08:42",
+    unread: 0,
+    pinned: false,
+    online: false,
   },
   {
     img: faker.image.avatar(),
@@ -224,13 +252,14 @@ const GeneralApp = () => {
       <Stack direction="row" sx={{ width: "100%" }}>
         <Box
           sx={{
+            
             height: "100%",
             width: 320,
             backgroundColor: "#F8FAFF",
             boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
           }}
         >
-          <Stack p={3} spacing={2}>
+          <Stack p={3} spacing={2} sx={{ maxHeight: "100vh",}}>
             <Stack
               alignItems={"center"}
               justifyContent="space-between"
@@ -259,6 +288,10 @@ const GeneralApp = () => {
               </Stack>
               <Divider />
             </Stack>
+            <Stack sx={{flexGrow: 2, overflow: "scroll", height: "100%"}}>
+            
+            <SimpleBarStyle timeout={500} clickOnTrack={false} >
+            <Stack spacing={2.4} >
             <Typography variant="subtitle2" sx={{ color: "#676667" }}>
               Pinned
             </Typography>
@@ -273,6 +306,10 @@ const GeneralApp = () => {
             {ChatList.filter((el) => !el.pinned).map((el, idx) => {
               return <ChatElement {...el} />;
             })}
+           </Stack>
+            </SimpleBarStyle>
+            </Stack>
+            
           </Stack>
         </Box>
         <Box
@@ -289,7 +326,7 @@ const GeneralApp = () => {
         >
           {searchParams.get("type") === "individual-chat" &&
           searchParams.get("id") ? (
-            <Stack height={"100%"}>
+            <Stack height={"100%"} maxHeight={"100vh"}>
               <Box
                 p={2}
                 width={"100%"}
@@ -346,14 +383,18 @@ const GeneralApp = () => {
                 </Stack>
               </Box>
               <Box
-                height={"100%"}
                 width={"100%"}
                 sx={{
+                  flexGrow: 1,
+                  overflow: "scroll",
                   backgroundColor: "#F0F4FA",
                   boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
                 }}
               >
+                <SimpleBarStyle timeout={500} clickOnTrack={false} >
                 <Conversation />
+                </SimpleBarStyle>
+                
               </Box>
               <Box
                 p={2}

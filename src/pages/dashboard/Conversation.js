@@ -1,5 +1,6 @@
 import { Stack, Box, Typography, Divider } from "@mui/material";
 import React from "react";
+import { faker } from "@faker-js/faker";
 
 const list = [
   {
@@ -30,17 +31,26 @@ const list = [
     incoming: true,
     outgoing: false,
   },
+
   {
     type: "msg",
-    message: "Do you need a panda image or abstract?",
+    subtype: "img",
+    message: "Here You Go",
+    img: faker.image.abstract(),
     incoming: true,
     outgoing: false,
   },
   {
     type: "msg",
-    message: "Abstract would be better",
+    message: "Can you please send this in file format?",
     incoming: false,
     outgoing: true,
+  },
+  {
+    type: "msg",
+    message: "Yes sure, here you go.",
+    incoming: true,
+    outgoing: false,
   },
 ];
 
@@ -66,33 +76,67 @@ const Conversation = () => {
               );
 
             case "msg":
-              return (
-                <Stack
-                  direction="row"
-                  justifyContent={el.incoming ? "start" : "end"}
-                >
-                  <Box
-                    px={1.5}
-                    py={1.5}
-                    sx={{
-                      backgroundColor: el.incoming ? "#ffffff" : "#5B96F7",
-                      borderRadius: 1.5,
-                      width: "max-content",
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      color={el.incoming ? "#696969" : "#fff"}
+              switch (el.subtype) {
+                case "img":
+                  return (
+                    <Stack
+                      direction="row"
+                      justifyContent={el.incoming ? "start" : "end"}
                     >
-                      {el.message}
-                    </Typography>
-                  </Box>
-                </Stack>
-              );
+                      <Box
+                        px={1.5}
+                        py={1.5}
+                        sx={{
+                          backgroundColor: el.incoming ? "#ffffff" : "#5B96F7",
+                          borderRadius: 1.5,
+                          width: "max-content",
+                        }}
+                      >
+                        <Stack spacing={1}>
+                          <img
+                            src={el.img}
+                            alt={el.message}
+                            style={{ maxHeight: 210, borderRadius: "10px" }}
+                          />
+                          <Typography
+                            variant="body2"
+                            color={el.incoming ? "#696969" : "#fff"}
+                          >
+                            {el.message}
+                          </Typography>
+                        </Stack>
+                      </Box>
+                    </Stack>
+                  );
+
+                default:
+                  return (
+                    <Stack
+                      direction="row"
+                      justifyContent={el.incoming ? "start" : "end"}
+                    >
+                      <Box
+                        px={1.5}
+                        py={1.5}
+                        sx={{
+                          backgroundColor: el.incoming ? "#ffffff" : "#5B96F7",
+                          borderRadius: 1.5,
+                          width: "max-content",
+                        }}
+                      >
+                        <Typography
+                          variant="body2"
+                          color={el.incoming ? "#696969" : "#fff"}
+                        >
+                          {el.message}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  );
+              }
 
             default:
-                return <></>;
-           
+              return <></>;
           }
         })}
       </Stack>
