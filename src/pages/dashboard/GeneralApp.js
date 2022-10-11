@@ -12,6 +12,7 @@ import {
   Avatar,
   TextField,
   InputAdornment,
+  Fab,
 } from "@mui/material";
 import {
   ArchiveBox,
@@ -23,13 +24,30 @@ import {
   Smiley,
   LinkSimple,
   PaperPlaneTilt,
+  Image,
+  Sticker,
+  Camera,
+  File,
+  User,
+  X,
+  CaretCircleRight,
+  CaretRight,
+  Star,
+  Notification,
+  Bell,
+  Prohibit,
+  Trash,
 } from "phosphor-react";
 import { faker } from "@faker-js/faker";
+
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 
 import NoChat from "../../assets/Images/Illustration/no-chat.svg";
 import { Link, useSearchParams } from "react-router-dom";
 import Conversation from "./Conversation";
 import Scrollbar, { SimpleBarStyle } from "../../components/Scrollbar";
+import { AntSwitch } from "../../layouts/dashboard";
 
 const truncateText = (string, n) => {
   return string.length > n ? `${string.slice(0, n)}...` : string;
@@ -244,22 +262,52 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
+const Actions = [
+  {
+    color: "primary",
+    icon: <Image size={24} />,
+    y: 102,
+  },
+  {
+    color: "error",
+    icon: <Sticker size={24} />,
+    y: 172,
+  },
+  {
+    color: "warning",
+    icon: <Camera size={24} />,
+    y: 242,
+  },
+  {
+    color: "success",
+    icon: <File size={24} />,
+    y: 312,
+  },
+  {
+    color: "secondary",
+    icon: <User size={24} />,
+    y: 382,
+  },
+];
+
 const GeneralApp = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const [openActions, setOpenActions] = React.useState(false);
+  const [openPicker, setOpenPicker] = React.useState(false);
 
   return (
     <>
       <Stack direction="row" sx={{ width: "100%" }}>
         <Box
           sx={{
-            
             height: "100%",
             width: 320,
             backgroundColor: "#F8FAFF",
             boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
           }}
         >
-          <Stack p={3} spacing={2} sx={{ maxHeight: "100vh",}}>
+          <Stack p={3} spacing={2} sx={{ maxHeight: "100vh" }}>
             <Stack
               alignItems={"center"}
               justifyContent="space-between"
@@ -288,34 +336,32 @@ const GeneralApp = () => {
               </Stack>
               <Divider />
             </Stack>
-            <Stack sx={{flexGrow: 2, overflow: "scroll", height: "100%"}}>
-            
-            <SimpleBarStyle timeout={500} clickOnTrack={false} >
-            <Stack spacing={2.4} >
-            <Typography variant="subtitle2" sx={{ color: "#676667" }}>
-              Pinned
-            </Typography>
-            {/* Chat List */}
-            {ChatList.filter((el) => el.pinned).map((el, idx) => {
-              return <ChatElement {...el} />;
-            })}
-            <Typography variant="subtitle2" sx={{ color: "#676667" }}>
-              All Chats
-            </Typography>
-            {/* Chat List */}
-            {ChatList.filter((el) => !el.pinned).map((el, idx) => {
-              return <ChatElement {...el} />;
-            })}
-           </Stack>
-            </SimpleBarStyle>
+            <Stack sx={{ flexGrow: 1, overflow: "scroll", height: "100%" }}>
+              <SimpleBarStyle timeout={500} clickOnTrack={false}>
+                <Stack spacing={2.4}>
+                  <Typography variant="subtitle2" sx={{ color: "#676667" }}>
+                    Pinned
+                  </Typography>
+                  {/* Chat List */}
+                  {ChatList.filter((el) => el.pinned).map((el, idx) => {
+                    return <ChatElement {...el} />;
+                  })}
+                  <Typography variant="subtitle2" sx={{ color: "#676667" }}>
+                    All Chats
+                  </Typography>
+                  {/* Chat List */}
+                  {ChatList.filter((el) => !el.pinned).map((el, idx) => {
+                    return <ChatElement {...el} />;
+                  })}
+                </Stack>
+              </SimpleBarStyle>
             </Stack>
-            
           </Stack>
         </Box>
         <Box
           sx={{
             height: "100%",
-            width: "calc(100vw - 420px)",
+            width: "calc(100vw - 740px)",
             backgroundColor: "#FFF",
             borderBottom:
               searchParams.get("type") === "individual-chat" &&
@@ -385,67 +431,126 @@ const GeneralApp = () => {
               <Box
                 width={"100%"}
                 sx={{
+                  position: "relative",
                   flexGrow: 1,
                   overflow: "scroll",
                   backgroundColor: "#F0F4FA",
                   boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
                 }}
               >
-                <SimpleBarStyle timeout={500} clickOnTrack={false} >
-                <Conversation />
+                <SimpleBarStyle timeout={500} clickOnTrack={false}>
+                  <Conversation />
                 </SimpleBarStyle>
-                
               </Box>
+
               <Box
-                p={2}
-                width={"100%"}
                 sx={{
-                  backgroundColor: "#F8FAFF",
-                  boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+                  position: "relative",
+                  backgroundColor: "transparent !important",
                 }}
               >
-                <Stack direction="row" alignItems={"center"} spacing={3}>
-                  <StyledInput
-                    fullWidth
-                    placeholder="Write a message..."
-                    variant="filled"
-                    InputProps={{
-                      disableUnderline: true,
-                      startAdornment: (
-                        <InputAdornment>
-                          <IconButton>
-                            <LinkSimple color="#5B96F7" />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment>
-                          <IconButton>
-                            <Smiley color="#5B96F7" />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      height: 48,
-                      width: 48,
-                      backgroundColor: "#5B96F7",
-                      borderRadius: 1.5,
-                    }}
-                  >
-                    <Stack
-                      sx={{ height: "100%" }}
-                      alignItems={"center"}
-                      justifyContent="center"
-                    >
-                      <IconButton>
-                        <PaperPlaneTilt color="#ffffff" />
-                      </IconButton>
+                <Box
+                  p={2}
+                  width={"100%"}
+                  sx={{
+                    backgroundColor: "#F8FAFF",
+                    boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+                  }}
+                >
+                  <Stack direction="row" alignItems={"center"} spacing={3}>
+                    <Stack sx={{ width: "100%" }}>
+                      <Box
+                        style={{
+                          zIndex: 10,
+                          position: "fixed",
+                          display: openPicker ? "inline" : "none",
+                          bottom: 100,
+                          right: 420,
+                        }}
+                      >
+                        <Picker
+                          theme="light"
+                          data={data}
+                          onEmojiSelect={console.log}
+                        />
+                      </Box>
+                      <StyledInput
+                        fullWidth
+                        placeholder="Write a message..."
+                        variant="filled"
+                        InputProps={{
+                          disableUnderline: true,
+                          startAdornment: (
+                            <Stack sx={{ width: "max-content" }}>
+                              <Stack
+                                sx={{
+                                  position: "relative",
+                                  display: openActions
+                                    ? "inline-block"
+                                    : "none",
+                                }}
+                              >
+                                {Actions.map((el) => (
+                                  <Fab
+                                    onClick={() => {
+                                      setOpenActions(!openActions);
+                                    }}
+                                    sx={{ position: "absolute", top: -el.y }}
+                                    color={el.color}
+                                    aria-label="add"
+                                  >
+                                    {el.icon}
+                                  </Fab>
+                                ))}
+                              </Stack>
+
+                              <InputAdornment>
+                                <IconButton
+                                  onClick={() => {
+                                    setOpenActions(!openActions);
+                                  }}
+                                >
+                                  <LinkSimple color="#5B96F7" />
+                                </IconButton>
+                              </InputAdornment>
+                            </Stack>
+                          ),
+                          endAdornment: (
+                            <Stack sx={{ position: "relative" }}>
+                              <InputAdornment>
+                                <IconButton
+                                  onClick={() => {
+                                    setOpenPicker(!openPicker);
+                                  }}
+                                >
+                                  <Smiley color="#5B96F7" />
+                                </IconButton>
+                              </InputAdornment>
+                            </Stack>
+                          ),
+                        }}
+                      />
                     </Stack>
-                  </Box>
-                </Stack>
+                    <Box
+                      sx={{
+                        height: 48,
+                        width: 48,
+                        backgroundColor: "#5B96F7",
+                        borderRadius: 1.5,
+                      }}
+                    >
+                      <Stack
+                        sx={{ height: "100%" }}
+                        alignItems={"center"}
+                        justifyContent="center"
+                      >
+                        <IconButton>
+                          <PaperPlaneTilt color="#ffffff" />
+                        </IconButton>
+                      </Stack>
+                    </Box>
+                  </Stack>
+                </Box>
               </Box>
             </Stack>
           ) : (
@@ -467,6 +572,157 @@ const GeneralApp = () => {
               </Typography>
             </Stack>
           )}
+        </Box>
+        <Box sx={{ width: 320, maxHeight: "100vh" }}>
+          <Stack sx={{ height: "100%" }}>
+            <Box
+              sx={{
+                boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+                width: "100%",
+                backgroundColor: "#F8FAFF",
+              }}
+            >
+              <Stack
+                sx={{ height: "100%", p: 2 }}
+                direction="row"
+                alignItems={"center"}
+                justifyContent="space-between"
+                spacing={3}
+              >
+                <Typography variant="subtitle2">Contact Info</Typography>
+                <IconButton>
+                  <X />
+                </IconButton>
+              </Stack>
+            </Box>
+            <Stack
+              sx={{
+                height: "100%",
+                position: "relative",
+                flexGrow: 1,
+                overflow: "scroll",
+              }}
+              p={3}
+              spacing={3}
+            >
+              <Stack alignItems="center" direction="row" spacing={2}>
+                <Avatar
+                  src={faker.image.avatar()}
+                  alt={faker.name.firstName()}
+                  sx={{ height: 64, width: 64 }}
+                />
+                <Stack spacing={0.5}>
+                  <Typography variant="article" fontWeight={600}>
+                    {faker.name.fullName()}
+                  </Typography>
+                  <Typography variant="body2" fontWeight={500}>
+                    {"+91 62543 28 739"}
+                  </Typography>
+                </Stack>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent={"space-evenly"}
+              >
+                <Stack alignItems={"center"} spacing={1}>
+                  <IconButton>
+                    <Phone />
+                  </IconButton>
+
+                  <Typography variant="overline">Voice</Typography>
+                </Stack>
+                <Stack alignItems={"center"} spacing={1}>
+                  <IconButton>
+                    <VideoCamera />
+                  </IconButton>
+
+                  <Typography variant="overline">Video</Typography>
+                </Stack>
+              </Stack>
+              <Divider />
+              <Stack spacing={0.5}>
+                <Typography variant="article" fontWeight={600}>
+                  About
+                </Typography>
+                <Typography variant="body2" fontWeight={500}>
+                  {"Imagination is the only limit"}
+                </Typography>
+              </Stack>
+              <Divider />
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent={"space-between"}
+              >
+                <Typography variant="subtitle2">Media, Links & Docs</Typography>
+                <Button endIcon={<CaretRight />}>401</Button>
+              </Stack>
+              <Stack direction={"row"} alignItems="center" spacing={2}>
+                {[1, 2, 3].map((el) => (
+                  <Box>
+                    <img
+                      src={faker.image.city()}
+                      alt={faker.internet.userName()}
+                    />
+                  </Box>
+                ))}
+              </Stack>
+              <Divider />
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent={"space-between"}
+              >
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <Star size={21} />
+                  <Typography variant="subtitle2">Starred Messages</Typography>
+                </Stack>
+
+                <IconButton>
+                  <CaretRight />
+                </IconButton>
+              </Stack>
+              <Divider />
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent={"space-between"}
+              >
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <Bell size={21} />
+                  <Typography variant="subtitle2">
+                    Mute Notifications
+                  </Typography>
+                </Stack>
+
+                <AntSwitch />
+              </Stack>
+              <Divider />
+              <Typography variant="body2">1 group in common</Typography>
+              <Stack direction="row" alignItems={"center"} spacing={2}>
+                <Avatar
+                  src={faker.image.imageUrl()}
+                  alt={faker.name.fullName()}
+                />
+                <Stack direction="column" spacing={0.5}>
+                  <Typography variant="subtitle2">Camel’s Gang</Typography>
+                  <Typography variant="caption">
+                    Owl, Parrot, Rabbit , You
+                  </Typography>
+                </Stack>
+              </Stack>
+              <Divider />
+              <Stack direction="row" alignItems={"center"} spacing={2}>
+                <Button fullWidth startIcon={<Prohibit />} variant="outlined">
+                  Block
+                </Button>
+                <Button fullWidth startIcon={<Trash />} variant="outlined">
+                  Delete
+                </Button>
+              </Stack>
+            </Stack>
+          </Stack>
         </Box>
       </Stack>
     </>

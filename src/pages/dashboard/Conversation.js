@@ -1,6 +1,24 @@
-import { Stack, Box, Typography, Divider } from "@mui/material";
+import { Stack, Box, Typography, Divider, IconButton } from "@mui/material";
 import React from "react";
 import { faker } from "@faker-js/faker";
+import { Link } from "react-router-dom";
+import { styled } from "@mui/material/styles";
+import { CaretDown, DownloadSimple, Image } from "phosphor-react";
+
+const MsgBox = styled(Box)(({ theme }) => ({
+  position: "relative",
+
+  "& .options": {
+    position: "absolute",
+    display: "none",
+  },
+  "&:hover": {
+    "& .options": {
+      cursor: "pointer",
+      display: "inline-block",
+    },
+  },
+}));
 
 const list = [
   {
@@ -46,11 +64,29 @@ const list = [
     incoming: false,
     outgoing: true,
   },
+
   {
     type: "msg",
+    subtype: "doc",
     message: "Yes sure, here you go.",
     incoming: true,
     outgoing: false,
+  },
+  {
+    type: "msg",
+    subtype: "link",
+    preview: faker.image.cats(),
+    message: "Yep, I can also do that",
+    incoming: true,
+    outgoing: false,
+  },
+  {
+    type: "msg",
+    subtype: "reply",
+    reply: "This is a reply",
+    message: "Yep, I can also do that",
+    incoming: false,
+    outgoing: true,
   },
 ];
 
@@ -79,59 +115,285 @@ const Conversation = () => {
               switch (el.subtype) {
                 case "img":
                   return (
-                    <Stack
-                      direction="row"
-                      justifyContent={el.incoming ? "start" : "end"}
-                    >
-                      <Box
-                        px={1.5}
-                        py={1.5}
-                        sx={{
-                          backgroundColor: el.incoming ? "#ffffff" : "#5B96F7",
-                          borderRadius: 1.5,
-                          width: "max-content",
-                        }}
+                    <MsgBox>
+                      <Stack
+                        direction="row"
+                        justifyContent={el.incoming ? "start" : "end"}
                       >
-                        <Stack spacing={1}>
-                          <img
-                            src={el.img}
-                            alt={el.message}
-                            style={{ maxHeight: 210, borderRadius: "10px" }}
-                          />
+                        <Box
+                          px={1.5}
+                          py={1.5}
+                          sx={{
+                            backgroundColor: el.incoming
+                              ? "#ffffff"
+                              : "#5B96F7",
+                            borderRadius: 1.5,
+                            width: "max-content",
+                          }}
+                        >
+                          <Stack
+                            direction={"row"}
+                            alignItems="center"
+                            justifyContent={"end"}
+                          >
+                            <CaretDown
+                              className="options"
+                              style={{
+                                color: el.incoming ? "#696969" : "#fff",
+                              }}
+                              p={1}
+                            />
+                          </Stack>
+                          <Stack spacing={1}>
+                            <img
+                              src={el.img}
+                              alt={el.message}
+                              style={{ maxHeight: 210, borderRadius: "10px" }}
+                            />
+                            <Typography
+                              variant="body2"
+                              color={el.incoming ? "#696969" : "#fff"}
+                            >
+                              {el.message}
+                            </Typography>
+                          </Stack>
+                        </Box>
+                      </Stack>
+                    </MsgBox>
+                  );
+
+                case "doc":
+                  return (
+                    <MsgBox>
+                      <Stack
+                        direction="row"
+                        justifyContent={el.incoming ? "start" : "end"}
+                      >
+                        <Box
+                          px={1.5}
+                          py={1.5}
+                          sx={{
+                            backgroundColor: el.incoming
+                              ? "#ffffff"
+                              : "#5B96F7",
+                            borderRadius: 1.5,
+                            width: "max-content",
+                          }}
+                        >
+                          <Stack
+                            direction={"row"}
+                            alignItems="center"
+                            justifyContent={"end"}
+                          >
+                            <CaretDown
+                              className="options"
+                              style={{
+                                color: el.incoming ? "#696969" : "#fff",
+                              }}
+                              p={1}
+                            />
+                          </Stack>
+                          <Stack spacing={2}>
+                            <Stack
+                              p={2}
+                              direction="row"
+                              spacing={3}
+                              alignItems="center"
+                              sx={{
+                                backgroundColor: "#F6F1F1",
+                                borderRadius: 1,
+                              }}
+                            >
+                              <Image size={48} />
+                              <Typography variant="caption">
+                                Abstract.png
+                              </Typography>
+                              <IconButton>
+                                <DownloadSimple />
+                              </IconButton>
+                            </Stack>
+                            <Typography
+                              variant="body2"
+                              color={el.incoming ? "#696969" : "#fff"}
+                            >
+                              {el.message}
+                            </Typography>
+                          </Stack>
+                        </Box>
+                      </Stack>
+                    </MsgBox>
+                  );
+                case "link":
+                  return (
+                    <MsgBox>
+                      <Stack
+                        direction="row"
+                        justifyContent={el.incoming ? "start" : "end"}
+                      >
+                        <Box
+                          px={1.5}
+                          py={1.5}
+                          sx={{
+                            backgroundColor: el.incoming
+                              ? "#ffffff"
+                              : "#5B96F7",
+                            borderRadius: 1.5,
+                            width: "max-content",
+                          }}
+                        >
+                          <Stack
+                            direction={"row"}
+                            alignItems="center"
+                            justifyContent={"end"}
+                          >
+                            <CaretDown
+                              className="options"
+                              style={{
+                                color: el.incoming ? "#696969" : "#fff",
+                              }}
+                              p={1}
+                            />
+                          </Stack>
+                          <Stack spacing={2}>
+                            <Stack
+                              p={2}
+                              direction="column"
+                              spacing={3}
+                              alignItems="center"
+                              sx={{
+                                backgroundColor: "#F6F1F1",
+                                borderRadius: 1,
+                              }}
+                            >
+                              <img
+                                src={el.preview}
+                                alt={el.message}
+                                style={{ maxHeight: 210, borderRadius: "10px" }}
+                              />
+                              <Stack direction={"column"} spacing={2}>
+                                <Typography variant="subtitle2">
+                                  Creating Chat App using MERN
+                                </Typography>
+                                <Typography
+                                  component={Link}
+                                  to="//https://www.youtube.com"
+                                  variant="cption"
+                                >
+                                  www.youtube.com/watch/v12uqywHTY2
+                                </Typography>
+                              </Stack>
+                            </Stack>
+                            <Typography
+                              variant="body2"
+                              color={el.incoming ? "#696969" : "#fff"}
+                            >
+                              {el.message}
+                            </Typography>
+                          </Stack>
+                        </Box>
+                      </Stack>
+                    </MsgBox>
+                  );
+
+                case "reply":
+                  return (
+                    <MsgBox>
+                      <Stack
+                        direction="row"
+                        justifyContent={el.incoming ? "start" : "end"}
+                      >
+                        <Box
+                          px={1.5}
+                          py={1.5}
+                          sx={{
+                            backgroundColor: el.incoming
+                              ? "#ffffff"
+                              : "#5B96F7",
+                            borderRadius: 1.5,
+                            width: "max-content",
+                          }}
+                        >
+                          <Stack
+                            direction={"row"}
+                            alignItems="center"
+                            justifyContent={"end"}
+                          >
+                            <CaretDown
+                              className="options"
+                              style={{
+                                color: el.incoming ? "#696969" : "#fff",
+                              }}
+                              p={1}
+                            />
+                          </Stack>
+                          <Stack spacing={2}>
+                            <Stack
+                              p={2}
+                              direction="column"
+                              spacing={3}
+                              alignItems="center"
+                              sx={{
+                                backgroundColor: "#F6F1F1",
+                                borderRadius: 1,
+                              }}
+                            >
+                              <Typography variant="body2" color={"#000000"}>
+                                {el.message}
+                              </Typography>
+                            </Stack>
+                            <Typography
+                              variant="body2"
+                              color={el.incoming ? "#696969" : "#fff"}
+                            >
+                              {el.reply}
+                            </Typography>
+                          </Stack>
+                        </Box>
+                      </Stack>
+                    </MsgBox>
+                  );
+
+                default:
+                  return (
+                    <MsgBox>
+                      <Stack
+                        className="msg-satck"
+                        direction="row"
+                        justifyContent={el.incoming ? "start" : "end"}
+                      >
+                        <Box
+                          px={1.5}
+                          py={1.5}
+                          sx={{
+                            backgroundColor: el.incoming
+                              ? "#ffffff"
+                              : "#5B96F7",
+                            borderRadius: 1.5,
+                            width: "max-content",
+                          }}
+                        >
+                          <Stack
+                            direction={"row"}
+                            alignItems="center"
+                            justifyContent={"end"}
+                          >
+                            <CaretDown
+                              className="options"
+                              style={{
+                                color: el.incoming ? "#696969" : "#fff",
+                              }}
+                              p={1}
+                            />
+                          </Stack>
                           <Typography
                             variant="body2"
                             color={el.incoming ? "#696969" : "#fff"}
                           >
                             {el.message}
                           </Typography>
-                        </Stack>
-                      </Box>
-                    </Stack>
-                  );
-
-                default:
-                  return (
-                    <Stack
-                      direction="row"
-                      justifyContent={el.incoming ? "start" : "end"}
-                    >
-                      <Box
-                        px={1.5}
-                        py={1.5}
-                        sx={{
-                          backgroundColor: el.incoming ? "#ffffff" : "#5B96F7",
-                          borderRadius: 1.5,
-                          width: "max-content",
-                        }}
-                      >
-                        <Typography
-                          variant="body2"
-                          color={el.incoming ? "#696969" : "#fff"}
-                        >
-                          {el.message}
-                        </Typography>
-                      </Box>
-                    </Stack>
+                        </Box>
+                      </Stack>
+                    </MsgBox>
                   );
               }
 

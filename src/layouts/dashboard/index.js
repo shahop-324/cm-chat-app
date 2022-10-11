@@ -179,4 +179,6 @@ const DashboardLayout = () => {
   );
 };
 
+export {AntSwitch};
+
 export default DashboardLayout;
