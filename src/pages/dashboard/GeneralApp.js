@@ -1,5 +1,5 @@
 import React from "react";
-import { styled, alpha } from "@mui/material/styles";
+import { styled, alpha, useTheme } from "@mui/material/styles";
 import {
   Box,
   IconButton,
@@ -155,13 +155,18 @@ const StyledChatBox = styled(Box)(({ theme }) => ({
 }));
 
 const ChatElement = ({ img, name, msg, time, unread, online }) => {
+  const theme = useTheme();
   return (
     <StyledChatBox
       sx={{
         width: "100%",
 
         borderRadius: 1,
-        backgroundColor: "#ffffff",
+
+        backgroundColor:
+          theme.palette.mode === "light"
+            ? "#fff"
+            : theme.palette.background.paper,
       }}
       p={2}
     >
@@ -207,7 +212,7 @@ const ChatElement = ({ img, name, msg, time, unread, online }) => {
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: 20,
-  backgroundColor: alpha("#EAF2FE", 1),
+  backgroundColor: alpha(theme.palette.background.paper, 1),
   marginRight: theme.spacing(2),
   marginLeft: 0,
   width: "100%",
@@ -296,6 +301,8 @@ const GeneralApp = () => {
   const [openActions, setOpenActions] = React.useState(false);
   const [openPicker, setOpenPicker] = React.useState(false);
 
+  const theme = useTheme();
+
   return (
     <>
       <Stack direction="row" sx={{ width: "100%" }}>
@@ -303,7 +310,11 @@ const GeneralApp = () => {
           sx={{
             height: "100%",
             width: 320,
-            backgroundColor: "#F8FAFF",
+            backgroundColor:
+              theme.palette.mode === "light"
+                ? "#F8FAFF"
+                : theme.palette.background,
+
             boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
           }}
         >
@@ -362,7 +373,10 @@ const GeneralApp = () => {
           sx={{
             height: "100%",
             width: "calc(100vw - 740px)",
-            backgroundColor: "#FFF",
+            backgroundColor:
+              theme.palette.mode === "light"
+                ? "#FFF"
+                : theme.palette.background,
             borderBottom:
               searchParams.get("type") === "individual-chat" &&
               searchParams.get("id")
@@ -377,7 +391,10 @@ const GeneralApp = () => {
                 p={2}
                 width={"100%"}
                 sx={{
-                  backgroundColor: "#F8FAFF",
+                  backgroundColor:
+                    theme.palette.mode === "light"
+                      ? "#F8FAFF"
+                      : theme.palette.background,
                   boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
                 }}
               >
@@ -434,7 +451,12 @@ const GeneralApp = () => {
                   position: "relative",
                   flexGrow: 1,
                   overflow: "scroll",
-                  backgroundColor: "#F0F4FA",
+
+                  backgroundColor:
+                    theme.palette.mode === "light"
+                      ? "#F0F4FA"
+                      : theme.palette.background.paper,
+
                   boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
                 }}
               >
@@ -453,7 +475,10 @@ const GeneralApp = () => {
                   p={2}
                   width={"100%"}
                   sx={{
-                    backgroundColor: "#F8FAFF",
+                    backgroundColor:
+                      theme.palette.mode === "light"
+                        ? "#F8FAFF"
+                        : theme.palette.background,
                     boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
                   }}
                 >
@@ -469,7 +494,7 @@ const GeneralApp = () => {
                         }}
                       >
                         <Picker
-                          theme="light"
+                          theme={theme.palette.mode}
                           data={data}
                           onEmojiSelect={console.log}
                         />
@@ -579,7 +604,10 @@ const GeneralApp = () => {
               sx={{
                 boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
                 width: "100%",
-                backgroundColor: "#F8FAFF",
+                backgroundColor:
+                  theme.palette.mode === "light"
+                    ? "#F8FAFF"
+                    : theme.palette.background,
               }}
             >
               <Stack

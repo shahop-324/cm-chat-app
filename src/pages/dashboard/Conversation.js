@@ -2,7 +2,7 @@ import { Stack, Box, Typography, Divider, IconButton } from "@mui/material";
 import React from "react";
 import { faker } from "@faker-js/faker";
 import { Link } from "react-router-dom";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme, alpha } from "@mui/material/styles";
 import { CaretDown, DownloadSimple, Image } from "phosphor-react";
 
 const MsgBox = styled(Box)(({ theme }) => ({
@@ -91,6 +91,7 @@ const list = [
 ];
 
 const Conversation = () => {
+  const theme = useTheme();
   return (
     <Box p={3}>
       <Stack spacing={3}>
@@ -104,7 +105,10 @@ const Conversation = () => {
                   justifyContent="space-between"
                 >
                   <Divider width="46%" />
-                  <Typography variant="caption" sx={{ color: "#696969" }}>
+                  <Typography
+                    variant="caption"
+                    sx={{ color: theme.palette.text }}
+                  >
                     {el.text}
                   </Typography>
                   <Divider width="46%" />
@@ -125,7 +129,7 @@ const Conversation = () => {
                           py={1.5}
                           sx={{
                             backgroundColor: el.incoming
-                              ? "#ffffff"
+                              ? alpha(theme.palette.background.default, 1)
                               : "#5B96F7",
                             borderRadius: 1.5,
                             width: "max-content",
@@ -139,7 +143,9 @@ const Conversation = () => {
                             <CaretDown
                               className="options"
                               style={{
-                                color: el.incoming ? "#696969" : "#fff",
+                                color: el.incoming
+                                  ? theme.palette.text
+                                  : "#fff",
                               }}
                               p={1}
                             />
@@ -152,7 +158,7 @@ const Conversation = () => {
                             />
                             <Typography
                               variant="body2"
-                              color={el.incoming ? "#696969" : "#fff"}
+                              color={el.incoming ? theme.palette.text : "#fff"}
                             >
                               {el.message}
                             </Typography>
@@ -174,7 +180,7 @@ const Conversation = () => {
                           py={1.5}
                           sx={{
                             backgroundColor: el.incoming
-                              ? "#ffffff"
+                              ? alpha(theme.palette.background.default, 1)
                               : "#5B96F7",
                             borderRadius: 1.5,
                             width: "max-content",
@@ -188,7 +194,9 @@ const Conversation = () => {
                             <CaretDown
                               className="options"
                               style={{
-                                color: el.incoming ? "#696969" : "#fff",
+                                color: el.incoming
+                                  ? theme.palette.text
+                                  : "#fff",
                               }}
                               p={1}
                             />
@@ -200,7 +208,7 @@ const Conversation = () => {
                               spacing={3}
                               alignItems="center"
                               sx={{
-                                backgroundColor: "#F6F1F1",
+                                backgroundColor: theme.palette.background.paper,
                                 borderRadius: 1,
                               }}
                             >
@@ -214,7 +222,7 @@ const Conversation = () => {
                             </Stack>
                             <Typography
                               variant="body2"
-                              color={el.incoming ? "#696969" : "#fff"}
+                              color={el.incoming ? theme.palette.text : "#fff"}
                             >
                               {el.message}
                             </Typography>
@@ -235,7 +243,7 @@ const Conversation = () => {
                           py={1.5}
                           sx={{
                             backgroundColor: el.incoming
-                              ? "#ffffff"
+                              ? alpha(theme.palette.background.default, 1)
                               : "#5B96F7",
                             borderRadius: 1.5,
                             width: "max-content",
@@ -261,7 +269,7 @@ const Conversation = () => {
                               spacing={3}
                               alignItems="center"
                               sx={{
-                                backgroundColor: "#F6F1F1",
+                                backgroundColor: theme.palette.background.paper,
                                 borderRadius: 1,
                               }}
                             >
@@ -285,7 +293,7 @@ const Conversation = () => {
                             </Stack>
                             <Typography
                               variant="body2"
-                              color={el.incoming ? "#696969" : "#fff"}
+                              color={el.incoming ? theme.palette.text : "#fff"}
                             >
                               {el.message}
                             </Typography>
@@ -307,7 +315,7 @@ const Conversation = () => {
                           py={1.5}
                           sx={{
                             backgroundColor: el.incoming
-                              ? "#ffffff"
+                              ? alpha(theme.palette.background.default, 1)
                               : "#5B96F7",
                             borderRadius: 1.5,
                             width: "max-content",
@@ -333,17 +341,24 @@ const Conversation = () => {
                               spacing={3}
                               alignItems="center"
                               sx={{
-                                backgroundColor: "#F6F1F1",
+                                backgroundColor: alpha(
+                                  theme.palette.background.default,
+                                  1
+                                ),
+
                                 borderRadius: 1,
                               }}
                             >
-                              <Typography variant="body2" color={"#000000"}>
+                              <Typography
+                                variant="body2"
+                                color={theme.palette.text}
+                              >
                                 {el.message}
                               </Typography>
                             </Stack>
                             <Typography
                               variant="body2"
-                              color={el.incoming ? "#696969" : "#fff"}
+                              color={el.incoming ? theme.palette.text : "#fff"}
                             >
                               {el.reply}
                             </Typography>
@@ -366,7 +381,7 @@ const Conversation = () => {
                           py={1.5}
                           sx={{
                             backgroundColor: el.incoming
-                              ? "#ffffff"
+                              ? alpha(theme.palette.background.default, 1)
                               : "#5B96F7",
                             borderRadius: 1.5,
                             width: "max-content",
@@ -380,14 +395,16 @@ const Conversation = () => {
                             <CaretDown
                               className="options"
                               style={{
-                                color: el.incoming ? "#696969" : "#fff",
+                                color: el.incoming
+                                  ? theme.palette.text
+                                  : "#fff",
                               }}
                               p={1}
                             />
                           </Stack>
                           <Typography
                             variant="body2"
-                            color={el.incoming ? "#696969" : "#fff"}
+                            color={el.incoming ? theme.palette.text : "#fff"}
                           >
                             {el.message}
                           </Typography>

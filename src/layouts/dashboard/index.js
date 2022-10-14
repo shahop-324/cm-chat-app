@@ -8,6 +8,9 @@ import Logo from "../../assets/Images/logo.png";
 
 import { faker } from "@faker-js/faker";
 
+import { useTheme } from "@mui/material/styles";
+import useSettings from "../../hooks/useSettings";
+
 const Main_list = [
   {
     index: 0,
@@ -75,6 +78,10 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 const DashboardLayout = () => {
+  const theme = useTheme();
+
+  const { onToggleMode } = useSettings();
+
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   const handleChangeTab = (index) => {
@@ -88,7 +95,11 @@ const DashboardLayout = () => {
           sx={{
             height: "100vh",
             width: 100,
-            backgroundColor: "#F0F4FA",
+
+            backgroundColor:
+              theme.palette.mode === "light"
+                ? "#F0F4FA"
+                : theme.palette.background.paper,
             boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
           }}
         >
@@ -134,7 +145,13 @@ const DashboardLayout = () => {
                       onClick={() => {
                         handleChangeTab(el.index);
                       }}
-                      sx={{ width: "max-content", color: "#080707" }}
+                      sx={{
+                        width: "max-content",
+                        color:
+                          theme.palette.mode === "light"
+                            ? "#080707"
+                            : theme.palette.text.primary,
+                      }}
                     >
                       {el.icon}
                     </IconButton>
@@ -158,7 +175,13 @@ const DashboardLayout = () => {
                       onClick={() => {
                         handleChangeTab(el.index);
                       }}
-                      sx={{ width: "max-content", color: "#080707" }}
+                      sx={{
+                        width: "max-content",
+                        color:
+                          theme.palette.mode === "light"
+                            ? "#080707"
+                            : theme.palette.text.primary,
+                      }}
                     >
                       {el.icon}
                     </IconButton>
@@ -167,7 +190,7 @@ const DashboardLayout = () => {
               </Stack>
             </Stack>
             <Stack spacing={4}>
-              <AntSwitch defaultChecked />
+              <AntSwitch defaultChecked onChange={onToggleMode} />
               <Avatar alt={faker.name.fullName()} src={faker.image.avatar()} />
             </Stack>
           </Stack>
@@ -179,6 +202,6 @@ const DashboardLayout = () => {
   );
 };
 
-export {AntSwitch};
+export { AntSwitch };
 
 export default DashboardLayout;

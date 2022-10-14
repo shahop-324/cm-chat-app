@@ -2,7 +2,7 @@ import { pxToRem, responsiveFontSizes } from '../utils/getFontValue';
 
 // ----------------------------------------------------------------------
 
-const FONT_PRIMARY = 'Public Sans, sans-serif'; // Google Font
+const FONT_PRIMARY = 'Manrope, Public Sans, sans-serif'; // Google Font
 // const FONT_SECONDARY = 'CircularStd, sans-serif'; // Local Font
 
 const typography = {
@@ -53,7 +53,7 @@ const typography = {
     fontSize: pxToRem(16),
   },
   subtitle2: {
-    fontWeight: 600,
+    fontWeight: 700,
     lineHeight: 22 / 14,
     fontSize: pxToRem(14),
   },
@@ -64,10 +64,12 @@ const typography = {
   body2: {
     lineHeight: 22 / 14,
     fontSize: pxToRem(14),
+    fontWeight: 600,
   },
   caption: {
     lineHeight: 1.5,
     fontSize: pxToRem(12),
+    fontWeight: 600,
   },
   overline: {
     fontWeight: 700,
@@ -81,6 +83,9 @@ const typography = {
     fontSize: pxToRem(14),
     textTransform: 'capitalize',
   },
+  article: {
+    fontWeight: 700,
+  }
 };
 
 export default typography;
