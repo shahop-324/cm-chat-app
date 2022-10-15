@@ -130,7 +130,7 @@ const Conversation = () => {
                           sx={{
                             backgroundColor: el.incoming
                               ? alpha(theme.palette.background.default, 1)
-                              : "#5B96F7",
+                              : "#0162C4",
                             borderRadius: 1.5,
                             width: "max-content",
                           }}
@@ -181,7 +181,7 @@ const Conversation = () => {
                           sx={{
                             backgroundColor: el.incoming
                               ? alpha(theme.palette.background.default, 1)
-                              : "#5B96F7",
+                              : "#0162C4",
                             borderRadius: 1.5,
                             width: "max-content",
                           }}
@@ -244,7 +244,7 @@ const Conversation = () => {
                           sx={{
                             backgroundColor: el.incoming
                               ? alpha(theme.palette.background.default, 1)
-                              : "#5B96F7",
+                              : "#0162C4",
                             borderRadius: 1.5,
                             width: "max-content",
                           }}
@@ -316,7 +316,7 @@ const Conversation = () => {
                           sx={{
                             backgroundColor: el.incoming
                               ? alpha(theme.palette.background.default, 1)
-                              : "#5B96F7",
+                              : "#0162C4",
                             borderRadius: 1.5,
                             width: "max-content",
                           }}
@@ -382,7 +382,7 @@ const Conversation = () => {
                           sx={{
                             backgroundColor: el.incoming
                               ? alpha(theme.palette.background.default, 1)
-                              : "#5B96F7",
+                              : "#0162C4",
                             borderRadius: 1.5,
                             width: "max-content",
                           }}

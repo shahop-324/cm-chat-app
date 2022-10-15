@@ -1,6 +1,25 @@
-import { Box, Stack, IconButton, Divider, Switch, Avatar } from "@mui/material";
+import {
+  Box,
+  Stack,
+  IconButton,
+  Divider,
+  Switch,
+  Avatar,
+  Menu,
+  MenuItem,
+  Fade,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { ChatCircleDots, GearSix, Phone, Users } from "phosphor-react";
+import {
+  ChatCircleDots,
+  Gear,
+  GearSix,
+  Phone,
+  SignOut,
+  User,
+  Users,
+  UserSwitch,
+} from "phosphor-react";
 import React from "react";
 import { Outlet } from "react-router-dom";
 
@@ -53,7 +72,7 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
       color: "#fff",
       "& + .MuiSwitch-track": {
         opacity: 1,
-        backgroundColor: theme.palette.mode === "dark" ? "#177ddc" : "#5B96F7",
+        backgroundColor: theme.palette.mode === "dark" ? "#177ddc" : "#0162C4",
       },
     },
   },
@@ -77,6 +96,21 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
+const Profile_Menu = [
+  {
+    title: "Profile",
+    icon: <User />,
+  },
+  {
+    title: "Settings",
+    icon: <Gear />,
+  },
+  {
+    title: "Profile",
+    icon: <SignOut />,
+  },
+];
+
 const DashboardLayout = () => {
   const theme = useTheme();
 
@@ -86,6 +120,15 @@ const DashboardLayout = () => {
 
   const handleChangeTab = (index) => {
     setSelectedTab(index);
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openMenu = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -131,7 +174,7 @@ const DashboardLayout = () => {
                 {Main_list.map((el) => {
                   return el.index === selectedTab ? (
                     <Box
-                      sx={{ backgroundColor: "#5B96F7", borderRadius: 1.5 }}
+                      sx={{ backgroundColor: "#0162C4", borderRadius: 1.5 }}
                       p={1}
                     >
                       <IconButton
@@ -161,7 +204,7 @@ const DashboardLayout = () => {
                 {Other_list.map((el) => {
                   return el.index === selectedTab ? (
                     <Box
-                      sx={{ backgroundColor: "#5B96F7", borderRadius: 1.5 }}
+                      sx={{ backgroundColor: "#0162C4", borderRadius: 1.5 }}
                       p={1}
                     >
                       <IconButton
@@ -191,7 +234,52 @@ const DashboardLayout = () => {
             </Stack>
             <Stack spacing={4}>
               <AntSwitch defaultChecked onChange={onToggleMode} />
-              <Avatar alt={faker.name.fullName()} src={faker.image.avatar()} />
+              <Avatar
+                id="profile-positioned-button"
+                aria-controls={openMenu ? "profile-positioned-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={openMenu ? "true" : undefined}
+                alt={faker.name.fullName()}
+                src={faker.image.avatar()}
+                onClick={handleClick}
+              />
+              <Menu
+                MenuListProps={{
+                  "aria-labelledby": "fade-button",
+                }}
+                TransitionComponent={Fade}
+                id="profile-positioned-menu"
+                aria-labelledby="profile-positioned-button"
+                anchorEl={anchorEl}
+                open={openMenu}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+              >
+                <Box p={1}>
+                  <Stack spacing={1}>
+                    {Profile_Menu.map((el) => (
+                      <MenuItem onClick={handleClose}>
+                        <Stack
+                          sx={{ width: 100 }}
+                          direction="row"
+                          alignItems={"center"}
+                          justifyContent="space-between"
+                        >
+                          <span>{el.title}</span>
+                          {el.icon}
+                        </Stack>{" "}
+                      </MenuItem>
+                    ))}
+                  </Stack>
+                </Box>
+              </Menu>
             </Stack>
           </Stack>
         </Box>

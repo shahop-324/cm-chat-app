@@ -13,6 +13,10 @@ import {
   TextField,
   InputAdornment,
   Fab,
+  Tooltip,
+  MenuItem,
+  Menu,
+  Fade,
 } from "@mui/material";
 import {
   ArchiveBox,
@@ -269,29 +273,49 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const Actions = [
   {
-    color: "primary",
+    color: "#4da5fe",
     icon: <Image size={24} />,
     y: 102,
+    title: "Photo/Video",
   },
   {
-    color: "error",
+    color: "#1b8cfe",
     icon: <Sticker size={24} />,
     y: 172,
+    title: "Stickers",
   },
   {
-    color: "warning",
+    color: "#0172e4",
     icon: <Camera size={24} />,
     y: 242,
+    title: "Image",
   },
   {
-    color: "success",
+    color: "#0159b2",
     icon: <File size={24} />,
     y: 312,
+    title: "Document",
   },
   {
-    color: "secondary",
+    color: "#013f7f",
     icon: <User size={24} />,
     y: 382,
+    title: "Contact",
+  },
+];
+
+const Conversation_Menu = [
+  {
+    title: "Contact info",
+  },
+  {
+    title: "Mute notifications",
+  },
+  {
+    title: "Clear messages",
+  },
+  {
+    title: "Delete chat",
   },
 ];
 
@@ -302,6 +326,16 @@ const GeneralApp = () => {
   const [openPicker, setOpenPicker] = React.useState(false);
 
   const theme = useTheme();
+
+  const [conversationMenuAnchorEl, setConversationMenuAnchorEl] =
+    React.useState(null);
+  const openConversationMenu = Boolean(conversationMenuAnchorEl);
+  const handleClickConversationMenu = (event) => {
+    setConversationMenuAnchorEl(event.currentTarget);
+  };
+  const handleCloseConversationMenu = () => {
+    setConversationMenuAnchorEl(null);
+  };
 
   return (
     <>
@@ -372,16 +406,19 @@ const GeneralApp = () => {
         <Box
           sx={{
             height: "100%",
-            width: "calc(100vw - 740px)",
+            width:
+              searchParams.get("open") === "true"
+                ? `calc(100vw - 740px )`
+                : "calc(100vw - 420px )",
             backgroundColor:
               theme.palette.mode === "light"
                 ? "#FFF"
-                : theme.palette.background,
+                : theme.palette.background.paper,
             borderBottom:
               searchParams.get("type") === "individual-chat" &&
               searchParams.get("id")
                 ? "0px"
-                : "6px solid #5B96F7",
+                : "6px solid #0162C4",
           }}
         >
           {searchParams.get("type") === "individual-chat" &&
@@ -404,7 +441,14 @@ const GeneralApp = () => {
                   sx={{ width: "100%", height: "100%" }}
                   justifyContent="space-between"
                 >
-                  <Stack spacing={2} direction="row">
+                  <Stack
+                    onClick={() => {
+                      searchParams.set("open", true);
+                      setSearchParams(searchParams);
+                    }}
+                    spacing={2}
+                    direction="row"
+                  >
                     <Box>
                       <StyledBadge
                         overlap="circular"
@@ -439,9 +483,55 @@ const GeneralApp = () => {
                     </IconButton>
 
                     <Divider orientation="vertical" flexItem />
-                    <IconButton>
+                    <IconButton
+                      id="conversation-positioned-button"
+                      aria-controls={
+                        openConversationMenu
+                          ? "conversation-positioned-menu"
+                          : undefined
+                      }
+                      aria-haspopup="true"
+                      aria-expanded={openConversationMenu ? "true" : undefined}
+                      onClick={handleClickConversationMenu}
+                    >
                       <CaretDown />
                     </IconButton>
+                    <Menu
+                      MenuListProps={{
+                        "aria-labelledby": "fade-button",
+                      }}
+                      TransitionComponent={Fade}
+                      id="conversation-positioned-menu"
+                      aria-labelledby="conversation-positioned-button"
+                      anchorEl={conversationMenuAnchorEl}
+                      open={openConversationMenu}
+                      onClose={handleCloseConversationMenu}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                    >
+                      <Box p={1}>
+                        <Stack spacing={1}>
+                          {Conversation_Menu.map((el) => (
+                            <MenuItem onClick={handleCloseConversationMenu}>
+                              <Stack
+                                sx={{ minWidth: 100 }}
+                                direction="row"
+                                alignItems={"center"}
+                                justifyContent="space-between"
+                              >
+                                <span>{el.title}</span>
+                              </Stack>{" "}
+                            </MenuItem>
+                          ))}
+                        </Stack>
+                      </Box>
+                    </Menu>
                   </Stack>
                 </Stack>
               </Box>
@@ -455,7 +545,7 @@ const GeneralApp = () => {
                   backgroundColor:
                     theme.palette.mode === "light"
                       ? "#F0F4FA"
-                      : theme.palette.background.paper,
+                      : theme.palette.background,
 
                   boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
                 }}
@@ -489,8 +579,9 @@ const GeneralApp = () => {
                           zIndex: 10,
                           position: "fixed",
                           display: openPicker ? "inline" : "none",
-                          bottom: 100,
-                          right: 420,
+                          bottom: 81,
+                          right:
+                            searchParams.get("open") === "true" ? 420 : 100,
                         }}
                       >
                         <Picker
@@ -516,16 +607,21 @@ const GeneralApp = () => {
                                 }}
                               >
                                 {Actions.map((el) => (
-                                  <Fab
-                                    onClick={() => {
-                                      setOpenActions(!openActions);
-                                    }}
-                                    sx={{ position: "absolute", top: -el.y }}
-                                    color={el.color}
-                                    aria-label="add"
-                                  >
-                                    {el.icon}
-                                  </Fab>
+                                  <Tooltip placement="right" title={el.title}>
+                                    <Fab
+                                      onClick={() => {
+                                        setOpenActions(!openActions);
+                                      }}
+                                      sx={{
+                                        position: "absolute",
+                                        top: -el.y,
+                                        backgroundColor: el.color,
+                                      }}
+                                      aria-label="add"
+                                    >
+                                      {el.icon}
+                                    </Fab>
+                                  </Tooltip>
                                 ))}
                               </Stack>
 
@@ -535,7 +631,7 @@ const GeneralApp = () => {
                                     setOpenActions(!openActions);
                                   }}
                                 >
-                                  <LinkSimple color="#5B96F7" />
+                                  <LinkSimple />
                                 </IconButton>
                               </InputAdornment>
                             </Stack>
@@ -548,7 +644,7 @@ const GeneralApp = () => {
                                     setOpenPicker(!openPicker);
                                   }}
                                 >
-                                  <Smiley color="#5B96F7" />
+                                  <Smiley />
                                 </IconButton>
                               </InputAdornment>
                             </Stack>
@@ -560,7 +656,7 @@ const GeneralApp = () => {
                       sx={{
                         height: 48,
                         width: 48,
-                        backgroundColor: "#5B96F7",
+                        backgroundColor: "#0162C4",
                         borderRadius: 1.5,
                       }}
                     >
@@ -585,11 +681,15 @@ const GeneralApp = () => {
               alignItems="center"
               justifyContent={"center"}
             >
-              <img src={NoChat} alt="No conversation" />
+              <img
+                src={NoChat}
+                alt="No conversation"
+                style={{ maxWidth: "300px" }}
+              />
               <Typography variant="subtitle2">
                 Select a conversation or start a{" "}
                 <Link
-                  style={{ color: "#5B96F7", textDecoration: "none" }}
+                  style={{ color: "#0162C4", textDecoration: "none" }}
                   to="/"
                 >
                   new one
@@ -598,160 +698,171 @@ const GeneralApp = () => {
             </Stack>
           )}
         </Box>
-        <Box sx={{ width: 320, maxHeight: "100vh" }}>
-          <Stack sx={{ height: "100%" }}>
-            <Box
-              sx={{
-                boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
-                width: "100%",
-                backgroundColor:
-                  theme.palette.mode === "light"
-                    ? "#F8FAFF"
-                    : theme.palette.background,
-              }}
-            >
+        {searchParams.get("open") === "true" && (
+          <Box sx={{ width: 320, maxHeight: "100vh" }}>
+            <Stack sx={{ height: "100%" }}>
+              <Box
+                sx={{
+                  boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+                  width: "100%",
+                  backgroundColor:
+                    theme.palette.mode === "light"
+                      ? "#F8FAFF"
+                      : theme.palette.background,
+                }}
+              >
+                <Stack
+                  sx={{ height: "100%", p: 2 }}
+                  direction="row"
+                  alignItems={"center"}
+                  justifyContent="space-between"
+                  spacing={3}
+                >
+                  <Typography variant="subtitle2">Contact Info</Typography>
+                  <IconButton
+                    onClick={() => {
+                      searchParams.set("open", false);
+                      setSearchParams(searchParams);
+                    }}
+                  >
+                    <X />
+                  </IconButton>
+                </Stack>
+              </Box>
               <Stack
-                sx={{ height: "100%", p: 2 }}
-                direction="row"
-                alignItems={"center"}
-                justifyContent="space-between"
+                sx={{
+                  height: "100%",
+                  position: "relative",
+                  flexGrow: 1,
+                  overflow: "scroll",
+                }}
+                p={3}
                 spacing={3}
               >
-                <Typography variant="subtitle2">Contact Info</Typography>
-                <IconButton>
-                  <X />
-                </IconButton>
-              </Stack>
-            </Box>
-            <Stack
-              sx={{
-                height: "100%",
-                position: "relative",
-                flexGrow: 1,
-                overflow: "scroll",
-              }}
-              p={3}
-              spacing={3}
-            >
-              <Stack alignItems="center" direction="row" spacing={2}>
-                <Avatar
-                  src={faker.image.avatar()}
-                  alt={faker.name.firstName()}
-                  sx={{ height: 64, width: 64 }}
-                />
+                <Stack alignItems="center" direction="row" spacing={2}>
+                  <Avatar
+                    src={faker.image.avatar()}
+                    alt={faker.name.firstName()}
+                    sx={{ height: 64, width: 64 }}
+                  />
+                  <Stack spacing={0.5}>
+                    <Typography variant="article" fontWeight={600}>
+                      {faker.name.fullName()}
+                    </Typography>
+                    <Typography variant="body2" fontWeight={500}>
+                      {"+91 62543 28 739"}
+                    </Typography>
+                  </Stack>
+                </Stack>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent={"space-evenly"}
+                >
+                  <Stack alignItems={"center"} spacing={1}>
+                    <IconButton>
+                      <Phone />
+                    </IconButton>
+
+                    <Typography variant="overline">Voice</Typography>
+                  </Stack>
+                  <Stack alignItems={"center"} spacing={1}>
+                    <IconButton>
+                      <VideoCamera />
+                    </IconButton>
+
+                    <Typography variant="overline">Video</Typography>
+                  </Stack>
+                </Stack>
+                <Divider />
                 <Stack spacing={0.5}>
                   <Typography variant="article" fontWeight={600}>
-                    {faker.name.fullName()}
+                    About
                   </Typography>
                   <Typography variant="body2" fontWeight={500}>
-                    {"+91 62543 28 739"}
+                    {"Imagination is the only limit"}
                   </Typography>
                 </Stack>
-              </Stack>
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent={"space-evenly"}
-              >
-                <Stack alignItems={"center"} spacing={1}>
-                  <IconButton>
-                    <Phone />
-                  </IconButton>
-
-                  <Typography variant="overline">Voice</Typography>
-                </Stack>
-                <Stack alignItems={"center"} spacing={1}>
-                  <IconButton>
-                    <VideoCamera />
-                  </IconButton>
-
-                  <Typography variant="overline">Video</Typography>
-                </Stack>
-              </Stack>
-              <Divider />
-              <Stack spacing={0.5}>
-                <Typography variant="article" fontWeight={600}>
-                  About
-                </Typography>
-                <Typography variant="body2" fontWeight={500}>
-                  {"Imagination is the only limit"}
-                </Typography>
-              </Stack>
-              <Divider />
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent={"space-between"}
-              >
-                <Typography variant="subtitle2">Media, Links & Docs</Typography>
-                <Button endIcon={<CaretRight />}>401</Button>
-              </Stack>
-              <Stack direction={"row"} alignItems="center" spacing={2}>
-                {[1, 2, 3].map((el) => (
-                  <Box>
-                    <img
-                      src={faker.image.city()}
-                      alt={faker.internet.userName()}
-                    />
-                  </Box>
-                ))}
-              </Stack>
-              <Divider />
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent={"space-between"}
-              >
-                <Stack direction="row" alignItems="center" spacing={2}>
-                  <Star size={21} />
-                  <Typography variant="subtitle2">Starred Messages</Typography>
-                </Stack>
-
-                <IconButton>
-                  <CaretRight />
-                </IconButton>
-              </Stack>
-              <Divider />
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent={"space-between"}
-              >
-                <Stack direction="row" alignItems="center" spacing={2}>
-                  <Bell size={21} />
+                <Divider />
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent={"space-between"}
+                >
                   <Typography variant="subtitle2">
-                    Mute Notifications
+                    Media, Links & Docs
                   </Typography>
+                  <Button endIcon={<CaretRight />}>401</Button>
                 </Stack>
+                <Stack direction={"row"} alignItems="center" spacing={2}>
+                  {[1, 2, 3].map((el) => (
+                    <Box>
+                      <img
+                        src={faker.image.city()}
+                        alt={faker.internet.userName()}
+                      />
+                    </Box>
+                  ))}
+                </Stack>
+                <Divider />
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent={"space-between"}
+                >
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Star size={21} />
+                    <Typography variant="subtitle2">
+                      Starred Messages
+                    </Typography>
+                  </Stack>
 
-                <AntSwitch />
-              </Stack>
-              <Divider />
-              <Typography variant="body2">1 group in common</Typography>
-              <Stack direction="row" alignItems={"center"} spacing={2}>
-                <Avatar
-                  src={faker.image.imageUrl()}
-                  alt={faker.name.fullName()}
-                />
-                <Stack direction="column" spacing={0.5}>
-                  <Typography variant="subtitle2">Camel’s Gang</Typography>
-                  <Typography variant="caption">
-                    Owl, Parrot, Rabbit , You
-                  </Typography>
+                  <IconButton>
+                    <CaretRight />
+                  </IconButton>
                 </Stack>
-              </Stack>
-              <Divider />
-              <Stack direction="row" alignItems={"center"} spacing={2}>
-                <Button fullWidth startIcon={<Prohibit />} variant="outlined">
-                  Block
-                </Button>
-                <Button fullWidth startIcon={<Trash />} variant="outlined">
-                  Delete
-                </Button>
+                <Divider />
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent={"space-between"}
+                >
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Bell size={21} />
+                    <Typography variant="subtitle2">
+                      Mute Notifications
+                    </Typography>
+                  </Stack>
+
+                  <AntSwitch />
+                </Stack>
+                <Divider />
+                <Typography variant="body2">1 group in common</Typography>
+                <Stack direction="row" alignItems={"center"} spacing={2}>
+                  <Avatar
+                    src={faker.image.imageUrl()}
+                    alt={faker.name.fullName()}
+                  />
+                  <Stack direction="column" spacing={0.5}>
+                    <Typography variant="subtitle2">Camel’s Gang</Typography>
+                    <Typography variant="caption">
+                      Owl, Parrot, Rabbit , You
+                    </Typography>
+                  </Stack>
+                </Stack>
+                <Divider />
+                <Stack direction="row" alignItems={"center"} spacing={2}>
+                  <Button fullWidth startIcon={<Prohibit />} variant="outlined">
+                    Block
+                  </Button>
+                  <Button fullWidth startIcon={<Trash />} variant="outlined">
+                    Delete
+                  </Button>
+                </Stack>
               </Stack>
             </Stack>
-          </Stack>
-        </Box>
+          </Box>
+        )}
       </Stack>
     </>
   );
