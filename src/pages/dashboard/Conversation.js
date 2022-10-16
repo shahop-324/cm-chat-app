@@ -1,9 +1,23 @@
-import { Stack, Box, Typography, Divider, IconButton } from "@mui/material";
+import {
+  Stack,
+  Box,
+  Typography,
+  Divider,
+  IconButton,
+} from "@mui/material";
 import React from "react";
 import { faker } from "@faker-js/faker";
 import { Link } from "react-router-dom";
 import { styled, useTheme, alpha } from "@mui/material/styles";
-import { CaretDown, DownloadSimple, Image } from "phosphor-react";
+import {
+  CaretDown,
+  DownloadSimple,
+  Image,
+} from "phosphor-react";
+import { SimpleBarStyle } from "../../components/Scrollbar";
+
+import { ChatHeader, ChatFooter } from "../../components/Chat";
+import useResponsive from "../../hooks/useResponsive";
 
 const MsgBox = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -90,10 +104,10 @@ const list = [
   },
 ];
 
-const Conversation = () => {
+const Conversation = ({isMobile}) => {
   const theme = useTheme();
   return (
-    <Box p={3}>
+    <Box p={isMobile ? 1 : 3}>
       <Stack spacing={3}>
         {list.map((el, idx) => {
           switch (el.type) {
@@ -423,4 +437,38 @@ const Conversation = () => {
   );
 };
 
-export default Conversation;
+const ChatComponent = () => {
+  const isMobile = useResponsive("between", "md", "xs", "sm");
+  const theme = useTheme();
+
+  return (
+    <Stack height={"100%"} maxHeight={"100vh"} width={isMobile ? "100vw" : "auto"}>
+      {/*  */}
+      <ChatHeader />
+      <Box
+        width={"100%"}
+        sx={{
+          position: "relative",
+          flexGrow: 1,
+          overflow: "scroll",
+
+          backgroundColor:
+            theme.palette.mode === "light"
+              ? "#F0F4FA"
+              : theme.palette.background,
+
+          boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+        }}
+      >
+        <SimpleBarStyle timeout={500} clickOnTrack={false}>
+          <Conversation isMobile={isMobile} />
+        </SimpleBarStyle>
+      </Box>
+
+      {/*  */}
+      <ChatFooter />
+    </Stack>
+  );
+};
+
+export default ChatComponent;

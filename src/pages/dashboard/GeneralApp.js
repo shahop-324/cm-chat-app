@@ -10,10 +10,6 @@ import {
   Button,
   Badge,
   Avatar,
-  TextField,
-  InputAdornment,
-  Fab,
-  Tooltip,
   MenuItem,
   Menu,
   Fade,
@@ -25,47 +21,28 @@ import {
   MagnifyingGlass,
   Phone,
   VideoCamera,
-  Smiley,
-  LinkSimple,
-  PaperPlaneTilt,
-  Image,
-  Sticker,
-  Camera,
-  File,
-  User,
   X,
-  CaretCircleRight,
   CaretRight,
   Star,
-  Notification,
   Bell,
   Prohibit,
   Trash,
 } from "phosphor-react";
 import { faker } from "@faker-js/faker";
 
-import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
-
 import NoChat from "../../assets/Images/Illustration/no-chat.svg";
 import { Link, useSearchParams } from "react-router-dom";
-import Conversation from "./Conversation";
-import Scrollbar, { SimpleBarStyle } from "../../components/Scrollbar";
+import { SimpleBarStyle } from "../../components/Scrollbar";
 import { AntSwitch } from "../../layouts/dashboard";
+import ChatComponent from "./Conversation";
 
 const truncateText = (string, n) => {
   return string.length > n ? `${string.slice(0, n)}...` : string;
 };
 
-const StyledInput = styled(TextField)(({ theme }) => ({
-  "& .MuiInputBase-input": {
-    paddingTop: "12px !important",
-    paddingBottom: "12px !important",
-  },
-}));
-
 const ChatList = [
   {
+    id: 0,
     img: faker.image.avatar(),
     name: faker.name.firstName(),
     msg: faker.music.songName(),
@@ -75,6 +52,7 @@ const ChatList = [
     online: true,
   },
   {
+    id: 1,
     img: faker.image.avatar(),
     name: faker.name.firstName(),
     msg: faker.music.songName(),
@@ -84,6 +62,7 @@ const ChatList = [
     online: false,
   },
   {
+    id: 2,
     img: faker.image.avatar(),
     name: faker.name.firstName(),
     msg: faker.music.songName(),
@@ -93,6 +72,7 @@ const ChatList = [
     online: true,
   },
   {
+    id: 3,
     img: faker.image.avatar(),
     name: faker.name.firstName(),
     msg: faker.music.songName(),
@@ -102,6 +82,7 @@ const ChatList = [
     online: true,
   },
   {
+    id: 4,
     img: faker.image.avatar(),
     name: faker.name.firstName(),
     msg: faker.music.songName(),
@@ -111,6 +92,7 @@ const ChatList = [
     online: false,
   },
   {
+    id: 5,
     img: faker.image.avatar(),
     name: faker.name.firstName(),
     msg: faker.music.songName(),
@@ -120,6 +102,7 @@ const ChatList = [
     online: false,
   },
   {
+    id: 6,
     img: faker.image.avatar(),
     name: faker.name.firstName(),
     msg: faker.music.songName(),
@@ -129,6 +112,7 @@ const ChatList = [
     online: false,
   },
   {
+    id: 7,
     img: faker.image.avatar(),
     name: faker.name.firstName(),
     msg: faker.music.songName(),
@@ -148,7 +132,6 @@ const StyledChatBox = styled(Box)(({ theme }) => ({
   },
   "&:hover": {
     cursor: "pointer",
-    backgroundColor: alpha("#ffffff", 0.25),
     "& .show-options": {
       display: "inline-block",
     },
@@ -158,19 +141,62 @@ const StyledChatBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const ChatElement = ({ img, name, msg, time, unread, online }) => {
+const Chat_Options = [
+  {
+    title: "Archive Chat",
+  },
+  {
+    title: "Mute Notifications",
+  },
+  {
+    title: "Delete Chat",
+  },
+  {
+    title: "Pin Chat",
+  },
+  {
+    title: "Mark as unread",
+  },
+];
+
+const ChatElement = ({ img, name, msg, time, unread, online, id }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedChatId = searchParams.get("id");
+
+  const isSelected = +selectedChatId === id;
+
   const theme = useTheme();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openMenu = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <StyledChatBox
+      onClick={() => {
+        searchParams.set("id", id);
+        setSearchParams(searchParams);
+      }}
+      id="chat-positioned-button"
+      aria-controls={openMenu ? "chat-positioned-menu" : undefined}
+      aria-haspopup="true"
+      aria-expanded={openMenu ? "true" : undefined}
       sx={{
         width: "100%",
 
         borderRadius: 1,
 
-        backgroundColor:
-          theme.palette.mode === "light"
-            ? "#fff"
-            : theme.palette.background.paper,
+        backgroundColor: isSelected
+          ? theme.palette.mode === "light"
+            ? alpha(theme.palette.primary.main, 0.5)
+            : theme.palette.primary.main
+          : theme.palette.mode === "light"
+          ? "#fff"
+          : theme.palette.background.paper,
       }}
       p={2}
     >
@@ -206,7 +232,44 @@ const ChatElement = ({ img, name, msg, time, unread, online }) => {
             color="primary"
             badgeContent={unread}
           />
-          <CaretDown size={12} className="show-options" />
+          <CaretDown onClick={handleClick} size={12} className="show-options" />
+          <Menu
+            MenuListProps={{
+              "aria-labelledby": "fade-button",
+            }}
+            TransitionComponent={Fade}
+            id="chat-positioned-menu"
+            aria-labelledby="chat-positioned-button"
+            anchorEl={anchorEl}
+            open={openMenu}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+          >
+            <Box p={1}>
+              <Stack spacing={1}>
+                {Chat_Options.map((el) => (
+                  <MenuItem onClick={handleClose}>
+                    <Stack
+                      sx={{ width: 100 }}
+                      direction="row"
+                      alignItems={"center"}
+                      justifyContent="space-between"
+                    >
+                      <span>{el.title}</span>
+                      {el.icon}
+                    </Stack>{" "}
+                  </MenuItem>
+                ))}
+              </Stack>
+            </Box>
+          </Menu>
         </Stack>
       </Stack>
     </StyledChatBox>
@@ -271,71 +334,10 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-const Actions = [
-  {
-    color: "#4da5fe",
-    icon: <Image size={24} />,
-    y: 102,
-    title: "Photo/Video",
-  },
-  {
-    color: "#1b8cfe",
-    icon: <Sticker size={24} />,
-    y: 172,
-    title: "Stickers",
-  },
-  {
-    color: "#0172e4",
-    icon: <Camera size={24} />,
-    y: 242,
-    title: "Image",
-  },
-  {
-    color: "#0159b2",
-    icon: <File size={24} />,
-    y: 312,
-    title: "Document",
-  },
-  {
-    color: "#013f7f",
-    icon: <User size={24} />,
-    y: 382,
-    title: "Contact",
-  },
-];
-
-const Conversation_Menu = [
-  {
-    title: "Contact info",
-  },
-  {
-    title: "Mute notifications",
-  },
-  {
-    title: "Clear messages",
-  },
-  {
-    title: "Delete chat",
-  },
-];
-
 const GeneralApp = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [openActions, setOpenActions] = React.useState(false);
-  const [openPicker, setOpenPicker] = React.useState(false);
-
   const theme = useTheme();
-
-  const [conversationMenuAnchorEl, setConversationMenuAnchorEl] =
-    React.useState(null);
-  const openConversationMenu = Boolean(conversationMenuAnchorEl);
-  const handleClickConversationMenu = (event) => {
-    setConversationMenuAnchorEl(event.currentTarget);
-  };
-  const handleCloseConversationMenu = () => {
-    setConversationMenuAnchorEl(null);
-  };
 
   return (
     <>
@@ -423,257 +425,7 @@ const GeneralApp = () => {
         >
           {searchParams.get("type") === "individual-chat" &&
           searchParams.get("id") ? (
-            <Stack height={"100%"} maxHeight={"100vh"}>
-              <Box
-                p={2}
-                width={"100%"}
-                sx={{
-                  backgroundColor:
-                    theme.palette.mode === "light"
-                      ? "#F8FAFF"
-                      : theme.palette.background,
-                  boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
-                }}
-              >
-                <Stack
-                  alignItems={"center"}
-                  direction={"row"}
-                  sx={{ width: "100%", height: "100%" }}
-                  justifyContent="space-between"
-                >
-                  <Stack
-                    onClick={() => {
-                      searchParams.set("open", true);
-                      setSearchParams(searchParams);
-                    }}
-                    spacing={2}
-                    direction="row"
-                  >
-                    <Box>
-                      <StyledBadge
-                        overlap="circular"
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        variant="dot"
-                      >
-                        <Avatar
-                          alt={faker.name.fullName()}
-                          src={faker.image.avatar()}
-                        />
-                      </StyledBadge>
-                    </Box>
-                    <Stack spacing={0.2}>
-                      <Typography variant="subtitle2">
-                        {faker.name.fullName()}
-                      </Typography>
-                      <Typography variant="caption">Online</Typography>
-                    </Stack>
-                  </Stack>
-                  <Stack direction={"row"} alignItems="center" spacing={3}>
-                    <IconButton>
-                      <VideoCamera />
-                    </IconButton>
-                    <IconButton>
-                      <Phone />
-                    </IconButton>
-                    <IconButton>
-                      <MagnifyingGlass />
-                    </IconButton>
-
-                    <Divider orientation="vertical" flexItem />
-                    <IconButton
-                      id="conversation-positioned-button"
-                      aria-controls={
-                        openConversationMenu
-                          ? "conversation-positioned-menu"
-                          : undefined
-                      }
-                      aria-haspopup="true"
-                      aria-expanded={openConversationMenu ? "true" : undefined}
-                      onClick={handleClickConversationMenu}
-                    >
-                      <CaretDown />
-                    </IconButton>
-                    <Menu
-                      MenuListProps={{
-                        "aria-labelledby": "fade-button",
-                      }}
-                      TransitionComponent={Fade}
-                      id="conversation-positioned-menu"
-                      aria-labelledby="conversation-positioned-button"
-                      anchorEl={conversationMenuAnchorEl}
-                      open={openConversationMenu}
-                      onClose={handleCloseConversationMenu}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "right",
-                      }}
-                      transformOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                      }}
-                    >
-                      <Box p={1}>
-                        <Stack spacing={1}>
-                          {Conversation_Menu.map((el) => (
-                            <MenuItem onClick={handleCloseConversationMenu}>
-                              <Stack
-                                sx={{ minWidth: 100 }}
-                                direction="row"
-                                alignItems={"center"}
-                                justifyContent="space-between"
-                              >
-                                <span>{el.title}</span>
-                              </Stack>{" "}
-                            </MenuItem>
-                          ))}
-                        </Stack>
-                      </Box>
-                    </Menu>
-                  </Stack>
-                </Stack>
-              </Box>
-              <Box
-                width={"100%"}
-                sx={{
-                  position: "relative",
-                  flexGrow: 1,
-                  overflow: "scroll",
-
-                  backgroundColor:
-                    theme.palette.mode === "light"
-                      ? "#F0F4FA"
-                      : theme.palette.background,
-
-                  boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
-                }}
-              >
-                <SimpleBarStyle timeout={500} clickOnTrack={false}>
-                  <Conversation />
-                </SimpleBarStyle>
-              </Box>
-
-              <Box
-                sx={{
-                  position: "relative",
-                  backgroundColor: "transparent !important",
-                }}
-              >
-                <Box
-                  p={2}
-                  width={"100%"}
-                  sx={{
-                    backgroundColor:
-                      theme.palette.mode === "light"
-                        ? "#F8FAFF"
-                        : theme.palette.background,
-                    boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
-                  }}
-                >
-                  <Stack direction="row" alignItems={"center"} spacing={3}>
-                    <Stack sx={{ width: "100%" }}>
-                      <Box
-                        style={{
-                          zIndex: 10,
-                          position: "fixed",
-                          display: openPicker ? "inline" : "none",
-                          bottom: 81,
-                          right:
-                            searchParams.get("open") === "true" ? 420 : 100,
-                        }}
-                      >
-                        <Picker
-                          theme={theme.palette.mode}
-                          data={data}
-                          onEmojiSelect={console.log}
-                        />
-                      </Box>
-                      <StyledInput
-                        fullWidth
-                        placeholder="Write a message..."
-                        variant="filled"
-                        InputProps={{
-                          disableUnderline: true,
-                          startAdornment: (
-                            <Stack sx={{ width: "max-content" }}>
-                              <Stack
-                                sx={{
-                                  position: "relative",
-                                  display: openActions
-                                    ? "inline-block"
-                                    : "none",
-                                }}
-                              >
-                                {Actions.map((el) => (
-                                  <Tooltip placement="right" title={el.title}>
-                                    <Fab
-                                      onClick={() => {
-                                        setOpenActions(!openActions);
-                                      }}
-                                      sx={{
-                                        position: "absolute",
-                                        top: -el.y,
-                                        backgroundColor: el.color,
-                                      }}
-                                      aria-label="add"
-                                    >
-                                      {el.icon}
-                                    </Fab>
-                                  </Tooltip>
-                                ))}
-                              </Stack>
-
-                              <InputAdornment>
-                                <IconButton
-                                  onClick={() => {
-                                    setOpenActions(!openActions);
-                                  }}
-                                >
-                                  <LinkSimple />
-                                </IconButton>
-                              </InputAdornment>
-                            </Stack>
-                          ),
-                          endAdornment: (
-                            <Stack sx={{ position: "relative" }}>
-                              <InputAdornment>
-                                <IconButton
-                                  onClick={() => {
-                                    setOpenPicker(!openPicker);
-                                  }}
-                                >
-                                  <Smiley />
-                                </IconButton>
-                              </InputAdornment>
-                            </Stack>
-                          ),
-                        }}
-                      />
-                    </Stack>
-                    <Box
-                      sx={{
-                        height: 48,
-                        width: 48,
-                        backgroundColor: "#0162C4",
-                        borderRadius: 1.5,
-                      }}
-                    >
-                      <Stack
-                        sx={{ height: "100%" }}
-                        alignItems={"center"}
-                        justifyContent="center"
-                      >
-                        <IconButton>
-                          <PaperPlaneTilt color="#ffffff" />
-                        </IconButton>
-                      </Stack>
-                    </Box>
-                  </Stack>
-                </Box>
-              </Box>
-            </Stack>
+            <ChatComponent />
           ) : (
             <Stack
               spacing={2}

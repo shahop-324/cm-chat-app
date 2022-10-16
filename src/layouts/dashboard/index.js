@@ -18,7 +18,6 @@ import {
   SignOut,
   User,
   Users,
-  UserSwitch,
 } from "phosphor-react";
 import React from "react";
 import { Outlet } from "react-router-dom";
@@ -29,6 +28,7 @@ import { faker } from "@faker-js/faker";
 
 import { useTheme } from "@mui/material/styles";
 import useSettings from "../../hooks/useSettings";
+import useResponsive from "../../hooks/useResponsive";
 
 const Main_list = [
   {
@@ -114,6 +114,8 @@ const Profile_Menu = [
 const DashboardLayout = () => {
   const theme = useTheme();
 
+  const isDesktop = useResponsive("up", "md");
+
   const { onToggleMode } = useSettings();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -134,155 +136,159 @@ const DashboardLayout = () => {
   return (
     <>
       <Stack direction="row">
-        <Box
-          sx={{
-            height: "100vh",
-            width: 100,
+        {isDesktop && (
+          <Box
+            sx={{
+              height: "100vh",
+              width: 100,
 
-            backgroundColor:
-              theme.palette.mode === "light"
-                ? "#F0F4FA"
-                : theme.palette.background.paper,
-            boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
-          }}
-        >
-          <Stack
-            py={3}
-            alignItems={"center"}
-            justifyContent="space-between"
-            sx={{ height: "100%" }}
+              backgroundColor:
+                theme.palette.mode === "light"
+                  ? "#F0F4FA"
+                  : theme.palette.background.paper,
+              boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+            }}
           >
-            <Stack alignItems={"center"} spacing={4}>
-              <Box
-                sx={{
-                  height: 64,
-                  width: 64,
-                  borderRadius: 1.5,
-                  backgroundColor: "#AFBBF7",
-                }}
-                p={2}
-              >
-                {/* // TODO => Place Logo here */}
-                <img src={Logo} alt="Tawk" />
-              </Box>
-              <Stack
-                sx={{ width: "max-content" }}
-                direction="column"
-                alignItems={"center"}
-                spacing={3}
-              >
-                {Main_list.map((el) => {
-                  return el.index === selectedTab ? (
-                    <Box
-                      sx={{ backgroundColor: "#0162C4", borderRadius: 1.5 }}
-                      p={1}
-                    >
+            <Stack
+              py={3}
+              alignItems={"center"}
+              justifyContent="space-between"
+              sx={{ height: "100%" }}
+            >
+              <Stack alignItems={"center"} spacing={4}>
+                <Box
+                  sx={{
+                    height: 64,
+                    width: 64,
+                    borderRadius: 1.5,
+                    backgroundColor: "#AFBBF7",
+                  }}
+                  p={2}
+                >
+                  {/* // TODO => Place Logo here */}
+                  <img src={Logo} alt="Tawk" />
+                </Box>
+                <Stack
+                  sx={{ width: "max-content" }}
+                  direction="column"
+                  alignItems={"center"}
+                  spacing={3}
+                >
+                  {Main_list.map((el) => {
+                    return el.index === selectedTab ? (
+                      <Box
+                        sx={{ backgroundColor: "#0162C4", borderRadius: 1.5 }}
+                        p={1}
+                      >
+                        <IconButton
+                          sx={{ width: "max-content", color: "#ffffff" }}
+                        >
+                          {el.icon}
+                        </IconButton>
+                      </Box>
+                    ) : (
                       <IconButton
-                        sx={{ width: "max-content", color: "#ffffff" }}
+                        onClick={() => {
+                          handleChangeTab(el.index);
+                        }}
+                        sx={{
+                          width: "max-content",
+                          color:
+                            theme.palette.mode === "light"
+                              ? "#080707"
+                              : theme.palette.text.primary,
+                        }}
                       >
                         {el.icon}
                       </IconButton>
-                    </Box>
-                  ) : (
-                    <IconButton
-                      onClick={() => {
-                        handleChangeTab(el.index);
-                      }}
-                      sx={{
-                        width: "max-content",
-                        color:
-                          theme.palette.mode === "light"
-                            ? "#080707"
-                            : theme.palette.text.primary,
-                      }}
-                    >
-                      {el.icon}
-                    </IconButton>
-                  );
-                })}
-                <Divider sx={{ width: 48 }} />
-                {Other_list.map((el) => {
-                  return el.index === selectedTab ? (
-                    <Box
-                      sx={{ backgroundColor: "#0162C4", borderRadius: 1.5 }}
-                      p={1}
-                    >
+                    );
+                  })}
+                  <Divider sx={{ width: 48 }} />
+                  {Other_list.map((el) => {
+                    return el.index === selectedTab ? (
+                      <Box
+                        sx={{ backgroundColor: "#0162C4", borderRadius: 1.5 }}
+                        p={1}
+                      >
+                        <IconButton
+                          sx={{ width: "max-content", color: "#ffffff" }}
+                        >
+                          {el.icon}
+                        </IconButton>
+                      </Box>
+                    ) : (
                       <IconButton
-                        sx={{ width: "max-content", color: "#ffffff" }}
+                        onClick={() => {
+                          handleChangeTab(el.index);
+                        }}
+                        sx={{
+                          width: "max-content",
+                          color:
+                            theme.palette.mode === "light"
+                              ? "#080707"
+                              : theme.palette.text.primary,
+                        }}
                       >
                         {el.icon}
                       </IconButton>
-                    </Box>
-                  ) : (
-                    <IconButton
-                      onClick={() => {
-                        handleChangeTab(el.index);
-                      }}
-                      sx={{
-                        width: "max-content",
-                        color:
-                          theme.palette.mode === "light"
-                            ? "#080707"
-                            : theme.palette.text.primary,
-                      }}
-                    >
-                      {el.icon}
-                    </IconButton>
-                  );
-                })}
+                    );
+                  })}
+                </Stack>
+              </Stack>
+              <Stack spacing={4}>
+                <AntSwitch defaultChecked onChange={onToggleMode} />
+                <Avatar
+                  id="profile-positioned-button"
+                  aria-controls={
+                    openMenu ? "profile-positioned-menu" : undefined
+                  }
+                  aria-haspopup="true"
+                  aria-expanded={openMenu ? "true" : undefined}
+                  alt={faker.name.fullName()}
+                  src={faker.image.avatar()}
+                  onClick={handleClick}
+                />
+                <Menu
+                  MenuListProps={{
+                    "aria-labelledby": "fade-button",
+                  }}
+                  TransitionComponent={Fade}
+                  id="profile-positioned-menu"
+                  aria-labelledby="profile-positioned-button"
+                  anchorEl={anchorEl}
+                  open={openMenu}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                >
+                  <Box p={1}>
+                    <Stack spacing={1}>
+                      {Profile_Menu.map((el) => (
+                        <MenuItem onClick={handleClose}>
+                          <Stack
+                            sx={{ width: 100 }}
+                            direction="row"
+                            alignItems={"center"}
+                            justifyContent="space-between"
+                          >
+                            <span>{el.title}</span>
+                            {el.icon}
+                          </Stack>{" "}
+                        </MenuItem>
+                      ))}
+                    </Stack>
+                  </Box>
+                </Menu>
               </Stack>
             </Stack>
-            <Stack spacing={4}>
-              <AntSwitch defaultChecked onChange={onToggleMode} />
-              <Avatar
-                id="profile-positioned-button"
-                aria-controls={openMenu ? "profile-positioned-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={openMenu ? "true" : undefined}
-                alt={faker.name.fullName()}
-                src={faker.image.avatar()}
-                onClick={handleClick}
-              />
-              <Menu
-                MenuListProps={{
-                  "aria-labelledby": "fade-button",
-                }}
-                TransitionComponent={Fade}
-                id="profile-positioned-menu"
-                aria-labelledby="profile-positioned-button"
-                anchorEl={anchorEl}
-                open={openMenu}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                transformOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-              >
-                <Box p={1}>
-                  <Stack spacing={1}>
-                    {Profile_Menu.map((el) => (
-                      <MenuItem onClick={handleClose}>
-                        <Stack
-                          sx={{ width: 100 }}
-                          direction="row"
-                          alignItems={"center"}
-                          justifyContent="space-between"
-                        >
-                          <span>{el.title}</span>
-                          {el.icon}
-                        </Stack>{" "}
-                      </MenuItem>
-                    ))}
-                  </Stack>
-                </Box>
-              </Menu>
-            </Stack>
-          </Stack>
-        </Box>
+          </Box>
+        )}
 
         <Outlet />
       </Stack>
