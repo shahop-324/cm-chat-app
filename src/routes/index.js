@@ -26,6 +26,8 @@ export default function Router() {
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: "app", element: <GeneralApp /> },
         { path: "conversation", element: <Conversation /> },
+        { path: "chats", element: <Chats /> },
+        { path: "contact", element: <Contact /> },
       ],
     },
     { path: "*", element: <Navigate to="/404" replace /> },
@@ -45,5 +47,11 @@ const GeneralApp = Loadable(
 );
 const Conversation = Loadable(
   lazy(() => import("../pages/dashboard/Conversation")),
+);
+const Chats = Loadable(
+  lazy(() => import("../pages/dashboard/Chats")),
+);
+const Contact = Loadable(
+  lazy(() => import("../pages/dashboard/Contact")),
 );
 const Page404 = Loadable(lazy(() => import("../pages/Page404")));
