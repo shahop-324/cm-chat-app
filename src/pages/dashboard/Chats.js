@@ -171,12 +171,6 @@ const StyledChatBox = styled(Box)(({ theme }) => ({
   },
   "&:hover": {
     cursor: "pointer",
-    "& .show-options": {
-      display: "inline-block",
-    },
-    "& .unread-count": {
-      display: "none",
-    },
   },
 }));
 
@@ -231,28 +225,21 @@ const ChatElement = ({ img, name, msg, time, unread, online, id }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedChatId = searchParams.get("id");
 
-  const isSelected = +selectedChatId === id;
+  let isSelected = +selectedChatId === id;
+
+  if(!selectedChatId) {
+    isSelected = false;
+  }
 
   const theme = useTheme();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const openMenu = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <StyledChatBox
       onClick={() => {
         searchParams.set("id", id);
+        searchParams.set("type", "individual-chat");
         setSearchParams(searchParams);
       }}
-      id="chat-positioned-button"
-      aria-controls={openMenu ? "chat-positioned-menu" : undefined}
-      aria-haspopup="true"
-      aria-expanded={openMenu ? "true" : undefined}
       sx={{
         width: "100%",
 
@@ -300,44 +287,6 @@ const ChatElement = ({ img, name, msg, time, unread, online, id }) => {
             color="primary"
             badgeContent={unread}
           />
-          <CaretDown onClick={handleClick} size={12} className="show-options" />
-          <Menu
-            MenuListProps={{
-              "aria-labelledby": "fade-button",
-            }}
-            TransitionComponent={Fade}
-            id="chat-positioned-menu"
-            aria-labelledby="chat-positioned-button"
-            anchorEl={anchorEl}
-            open={openMenu}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            transformOrigin={{
-              vertical: "bottom",
-              horizontal: "left",
-            }}
-          >
-            <Box p={1}>
-              <Stack spacing={1}>
-                {Chat_Options.map((el) => (
-                  <MenuItem onClick={handleClose}>
-                    <Stack
-                      sx={{ width: 100 }}
-                      direction="row"
-                      alignItems={"center"}
-                      justifyContent="space-between"
-                    >
-                      <span>{el.title}</span>
-                      {el.icon}
-                    </Stack>{" "}
-                  </MenuItem>
-                ))}
-              </Stack>
-            </Box>
-          </Menu>
         </Stack>
       </Stack>
     </StyledChatBox>
@@ -390,97 +339,103 @@ const Chats = () => {
         boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
       }}
     >
-      <Box
-        sx={{
-          zIndex: 10,
-          position: "absolute",
-          bottom: 0,
-          width: "100vw",
+      {!isDesktop && (
+        <Box
+          sx={{
+            zIndex: 10,
+            position: "absolute",
+            bottom: 0,
+            width: "100vw",
 
-          backgroundColor: theme.palette.background.paper,
-          boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
-        }}
-      >
-        <Stack
-          sx={{ width: "100%" }}
-          direction="row"
-          alignItems={"center"}
-          justifyContent="space-between"
-          spacing={2}
-          p={2}
+            backgroundColor: theme.palette.background.paper,
+            boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+          }}
         >
-          {Main_list.map((el) => {
-            return el.index === selectedTab ? (
-              <Box sx={{ backgroundColor: "#0162C4", borderRadius: 1.5 }} p={1}>
-                <IconButton sx={{ width: "max-content", color: "#ffffff" }}>
+          <Stack
+            sx={{ width: "100%" }}
+            direction="row"
+            alignItems={"center"}
+            justifyContent="space-between"
+            spacing={2}
+            p={2}
+          >
+            {Main_list.map((el) => {
+              return el.index === selectedTab ? (
+                <Box
+                  sx={{ backgroundColor: "#0162C4", borderRadius: 1.5 }}
+                  p={1}
+                >
+                  <IconButton sx={{ width: "max-content", color: "#ffffff" }}>
+                    {el.icon}
+                  </IconButton>
+                </Box>
+              ) : (
+                <IconButton
+                  onClick={() => {
+                    handleChangeTab(el.index);
+                  }}
+                  sx={{
+                    width: "max-content",
+                    color:
+                      theme.palette.mode === "light"
+                        ? "#080707"
+                        : theme.palette.text.primary,
+                  }}
+                >
                   {el.icon}
                 </IconButton>
+              );
+            })}
+            <Avatar
+              id="profile-positioned-button"
+              aria-controls={openMenu ? "profile-positioned-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={openMenu ? "true" : undefined}
+              alt={faker.name.fullName()}
+              src={faker.image.avatar()}
+              onClick={handleClick}
+            />
+            <Menu
+              MenuListProps={{
+                "aria-labelledby": "fade-button",
+              }}
+              TransitionComponent={Fade}
+              id="profile-positioned-menu"
+              aria-labelledby="profile-positioned-button"
+              anchorEl={anchorEl}
+              open={openMenu}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+            >
+              <Box p={1}>
+                <Stack spacing={1}>
+                  {Profile_Menu.map((el) => (
+                    <MenuItem onClick={handleClose}>
+                      <Stack
+                        sx={{ width: 100 }}
+                        direction="row"
+                        alignItems={"center"}
+                        justifyContent="space-between"
+                      >
+                        <span>{el.title}</span>
+                        {el.icon}
+                      </Stack>{" "}
+                    </MenuItem>
+                  ))}
+                </Stack>
               </Box>
-            ) : (
-              <IconButton
-                onClick={() => {
-                  handleChangeTab(el.index);
-                }}
-                sx={{
-                  width: "max-content",
-                  color:
-                    theme.palette.mode === "light"
-                      ? "#080707"
-                      : theme.palette.text.primary,
-                }}
-              >
-                {el.icon}
-              </IconButton>
-            );
-          })}
-          <Avatar
-            id="profile-positioned-button"
-            aria-controls={openMenu ? "profile-positioned-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={openMenu ? "true" : undefined}
-            alt={faker.name.fullName()}
-            src={faker.image.avatar()}
-            onClick={handleClick}
-          />
-          <Menu
-            MenuListProps={{
-              "aria-labelledby": "fade-button",
-            }}
-            TransitionComponent={Fade}
-            id="profile-positioned-menu"
-            aria-labelledby="profile-positioned-button"
-            anchorEl={anchorEl}
-            open={openMenu}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            transformOrigin={{
-              vertical: "bottom",
-              horizontal: "left",
-            }}
-          >
-            <Box p={1}>
-              <Stack spacing={1}>
-                {Profile_Menu.map((el) => (
-                  <MenuItem onClick={handleClose}>
-                    <Stack
-                      sx={{ width: 100 }}
-                      direction="row"
-                      alignItems={"center"}
-                      justifyContent="space-between"
-                    >
-                      <span>{el.title}</span>
-                      {el.icon}
-                    </Stack>{" "}
-                  </MenuItem>
-                ))}
-              </Stack>
-            </Box>
-          </Menu>
-        </Stack>
-      </Box>
+            </Menu>
+          </Stack>
+        </Box>
+      )}
+
       <Stack p={3} spacing={2} sx={{ maxHeight: "100vh" }}>
         <Stack
           alignItems={"center"}
