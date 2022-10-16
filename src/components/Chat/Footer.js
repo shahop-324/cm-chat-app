@@ -82,7 +82,7 @@ const Footer = () => {
       }}
     >
       <Box
-        p={ isMobile ? 1 : 2}
+        p={isMobile ? 1 : 2}
         width={"100%"}
         sx={{
           backgroundColor:
@@ -196,6 +196,5 @@ const Footer = () => {
     </Box>
   );
 };
-
 
 export default Footer;
