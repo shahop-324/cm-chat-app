@@ -2,11 +2,11 @@ import React from "react";
 import { useTheme } from "@mui/material/styles";
 import { Box, Stack, Typography } from "@mui/material";
 
-import NoChat from "../../assets/Images/Illustration/no-chat.svg";
 import { Link, useSearchParams } from "react-router-dom";
 import ChatComponent from "./Conversation";
 import Chats from "./Chats";
 import Contact from "./Contact";
+import NoChat from "../../assets/Illustration/NoChat";
 
 const GeneralApp = () => {
   const [searchParams] = useSearchParams();
@@ -45,15 +45,11 @@ const GeneralApp = () => {
               alignItems="center"
               justifyContent={"center"}
             >
-              <img
-                src={NoChat}
-                alt="No conversation"
-                style={{ maxWidth: "300px" }}
-              />
+              <NoChat  />
               <Typography variant="subtitle2">
                 Select a conversation or start a{" "}
                 <Link
-                  style={{ color: "#0162C4", textDecoration: "none" }}
+                  style={{ color: theme.palette.primary.main, textDecoration: "none" }}
                   to="/"
                 >
                   new one

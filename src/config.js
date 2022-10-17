@@ -60,5 +60,5 @@ export const defaultLang = allLangs[0]; // English
 
 
 
-// ROOT PATH AFTER LOGIN SUCCESSFUL
-export const PATH_AFTER_LOGIN = PATH_DASHBOARD.general.app; // as '/dashboard/app'
+// DEFAULT ROOT PATH
+export const DEFAULT_PATH = PATH_DASHBOARD.general.app; // as '/app'

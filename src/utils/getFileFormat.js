@@ -62,7 +62,7 @@ export function getFileFormat(fileUrl) {
 
 const getIcon = (name) => (
   <Image
-    src={`https://minimal-assets-api-dev.vercel.app/assets/icons/file/${name}.svg`}
+    src={`https://codingmonk/assets/icons/file/${name}.svg`}
     alt={name}
     sx={{ width: 28, height: 28 }}
   />

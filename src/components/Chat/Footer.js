@@ -185,7 +185,7 @@ const Footer = () => {
             sx={{
               height: 48,
               width: 48,
-              backgroundColor: "#0162C4",
+              backgroundColor: theme.palette.primary.main,
               borderRadius: 1.5,
             }}
           >

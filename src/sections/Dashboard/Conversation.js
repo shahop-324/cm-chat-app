@@ -61,7 +61,7 @@ const TextMsg = ({el}) => {
         sx={{
           backgroundColor: el.incoming
             ? alpha(theme.palette.background.default, 1)
-            : "#0162C4",
+            : theme.palette.primary.main,
           borderRadius: 1.5,
           width: "max-content",
         }}
@@ -87,7 +87,7 @@ const MediaMsg = ({el}) => {
         sx={{
           backgroundColor: el.incoming
             ? alpha(theme.palette.background.default, 1)
-            : "#0162C4",
+            : theme.palette.primary.main,
           borderRadius: 1.5,
           width: "max-content",
         }}
@@ -120,7 +120,7 @@ const DocMsg = ({el}) => {
         sx={{
           backgroundColor: el.incoming
             ? alpha(theme.palette.background.default, 1)
-            : "#0162C4",
+            : theme.palette.primary.main,
           borderRadius: 1.5,
           width: "max-content",
         }}
@@ -164,7 +164,7 @@ const LinkMsg = ({el}) => {
         sx={{
           backgroundColor: el.incoming
             ? alpha(theme.palette.background.default, 1)
-            : "#0162C4",
+            : theme.palette.primary.main,
           borderRadius: 1.5,
           width: "max-content",
         }}
@@ -221,7 +221,7 @@ const ReplyMsg = ({el}) => {
         sx={{
           backgroundColor: el.incoming
             ? alpha(theme.palette.background.paper, 1)
-            : "#0162C4",
+            : theme.palette.primary.main,
           borderRadius: 1.5,
           width: "max-content",
         }}

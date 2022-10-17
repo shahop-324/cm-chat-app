@@ -1,20 +1,13 @@
-import {
-  Box,
-  Divider,
-  IconButton,
-  Stack,
-} from "@mui/material";
+import { Box, Divider, IconButton, Stack } from "@mui/material";
 import React from "react";
 import { useTheme } from "@mui/material/styles";
 import AntSwitch from "../../components/AntSwitch";
 
-import Logo from "../../assets/Images/logo.png";
+import Logo from "../../assets/Images/logo.ico";
 
 import useSettings from "../../hooks/useSettings";
-import { Nav_Buttons, Nav_Setting} from "../../data";
+import { Nav_Buttons, Nav_Setting } from "../../data";
 import ProfileMenu from "./ProfileMenu";
-
-
 
 const SideBar = () => {
   const theme = useTheme();
@@ -54,7 +47,7 @@ const SideBar = () => {
               borderRadius: 1.5,
               backgroundColor: theme.palette.primary.main,
             }}
-            p={2}
+            p={1}
           >
             <img src={Logo} alt="Tawk" />
           </Box>
@@ -67,7 +60,10 @@ const SideBar = () => {
             {Nav_Buttons.map((el) => {
               return el.index === selectedTab ? (
                 <Box
-                  sx={{ backgroundColor: "#0162C4", borderRadius: 1.5 }}
+                  sx={{
+                    backgroundColor: theme.palette.primary.main,
+                    borderRadius: 1.5,
+                  }}
                   p={1}
                 >
                   <IconButton sx={{ width: "max-content", color: "#ffffff" }}>
@@ -95,7 +91,10 @@ const SideBar = () => {
             {Nav_Setting.map((el) => {
               return el.index === selectedTab ? (
                 <Box
-                  sx={{ backgroundColor: "#0162C4", borderRadius: 1.5 }}
+                  sx={{
+                    backgroundColor: theme.palette.primary.main,
+                    borderRadius: 1.5,
+                  }}
                   p={1}
                 >
                   <IconButton sx={{ width: "max-content", color: "#ffffff" }}>

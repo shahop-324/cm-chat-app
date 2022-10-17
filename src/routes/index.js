@@ -2,11 +2,10 @@ import { Suspense, lazy } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 
 // layouts
-import MainLayout from "../layouts/main";
 import DashboardLayout from "../layouts/dashboard";
 
 // config
-import { PATH_AFTER_LOGIN } from "../config";
+import { DEFAULT_PATH } from "../config";
 import LoadingScreen from "../components/LoadingScreen";
 
 const Loadable = (Component) => (props) => {
@@ -20,25 +19,19 @@ const Loadable = (Component) => (props) => {
 export default function Router() {
   return useRoutes([
     {
-      path: "dashboard",
+      path: "/",
       element: <DashboardLayout />,
       children: [
-        { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
+        { element: <Navigate to={DEFAULT_PATH} replace />, index: true },
         { path: "app", element: <GeneralApp /> },
         { path: "conversation", element: <Conversation /> },
         { path: "chats", element: <Chats /> },
         { path: "contact", element: <Contact /> },
-      ],
-    },
-    { path: "*", element: <Navigate to="/404" replace /> },
-    {
-      path: "*",
-      element: <MainLayout />,
-      children: [
         { path: "404", element: <Page404 /> },
         { path: "*", element: <Navigate to="/404" replace /> },
       ],
     },
+    { path: "*", element: <Navigate to="/404" replace /> },
   ]);
 }
 
