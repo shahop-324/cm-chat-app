@@ -51,7 +51,7 @@ const MessageOption = () => {
   );
 };
 
-const TextMsg = (el) => {
+const TextMsg = ({el}) => {
   const theme = useTheme();
   return (
     <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
@@ -77,7 +77,7 @@ const TextMsg = (el) => {
     </Stack>
   );
 };
-const MediaMsg = (el) => {
+const MediaMsg = ({el}) => {
   const theme = useTheme();
   return (
     <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
@@ -110,7 +110,7 @@ const MediaMsg = (el) => {
     </Stack>
   );
 };
-const DocMsg = (el) => {
+const DocMsg = ({el}) => {
   const theme = useTheme();
   return (
     <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
@@ -154,7 +154,7 @@ const DocMsg = (el) => {
     </Stack>
   );
 };
-const LinkMsg = (el) => {
+const LinkMsg = ({el}) => {
   const theme = useTheme();
   return (
     <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
@@ -211,7 +211,7 @@ const LinkMsg = (el) => {
     </Stack>
   );
 };
-const ReplyMsg = (el) => {
+const ReplyMsg = ({el}) => {
   const theme = useTheme();
   return (
     <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
@@ -254,7 +254,7 @@ const ReplyMsg = (el) => {
     </Stack>
   );
 };
-const Timeline = (el) => {
+const Timeline = ({el}) => {
   const theme = useTheme();
   return (
     <Stack direction="row" alignItems={"center"} justifyContent="space-between">
