@@ -7,127 +7,20 @@ import {
   Stack,
   Typography,
   InputBase,
-  MenuItem,
-  Fade,
   Avatar,
   Badge,
-  Menu,
 } from "@mui/material";
 import {
   ArchiveBox,
-  CaretDown,
-  ChatCircleDots,
   CircleDashed,
-  Gear,
   MagnifyingGlass,
-  Phone,
-  SignOut,
-  User,
-  Users,
 } from "phosphor-react";
 import { SimpleBarStyle } from "../../components/Scrollbar";
 import { useTheme, styled, alpha } from "@mui/material/styles";
 import { useSearchParams } from "react-router-dom";
-import { faker } from "@faker-js/faker";
 import useResponsive from "../../hooks/useResponsive";
-
-const Main_list = [
-  {
-    index: 0,
-    icon: <ChatCircleDots />,
-  },
-  {
-    index: 1,
-    icon: <Users />,
-  },
-  {
-    index: 2,
-    icon: <Phone />,
-  },
-];
-
-const ChatList = [
-  {
-    id: 0,
-    img: faker.image.avatar(),
-    name: faker.name.firstName(),
-    msg: faker.music.songName(),
-    time: "9:36",
-    unread: 0,
-    pinned: true,
-    online: true,
-  },
-  {
-    id: 1,
-    img: faker.image.avatar(),
-    name: faker.name.firstName(),
-    msg: faker.music.songName(),
-    time: "12:02",
-    unread: 2,
-    pinned: true,
-    online: false,
-  },
-  {
-    id: 2,
-    img: faker.image.avatar(),
-    name: faker.name.firstName(),
-    msg: faker.music.songName(),
-    time: "10:35",
-    unread: 3,
-    pinned: false,
-    online: true,
-  },
-  {
-    id: 3,
-    img: faker.image.avatar(),
-    name: faker.name.firstName(),
-    msg: faker.music.songName(),
-    time: "04:00",
-    unread: 0,
-    pinned: false,
-    online: true,
-  },
-  {
-    id: 4,
-    img: faker.image.avatar(),
-    name: faker.name.firstName(),
-    msg: faker.music.songName(),
-    time: "08:42",
-    unread: 0,
-    pinned: false,
-    online: false,
-  },
-  {
-    id: 5,
-    img: faker.image.avatar(),
-    name: faker.name.firstName(),
-    msg: faker.music.songName(),
-    time: "08:42",
-    unread: 0,
-    pinned: false,
-    online: false,
-  },
-  {
-    id: 6,
-    img: faker.image.avatar(),
-    name: faker.name.firstName(),
-    msg: faker.music.songName(),
-    time: "08:42",
-    unread: 0,
-    pinned: false,
-    online: false,
-  },
-  {
-    id: 7,
-    img: faker.image.avatar(),
-    name: faker.name.firstName(),
-    msg: faker.music.songName(),
-    time: "08:42",
-    unread: 0,
-    pinned: false,
-    online: false,
-  },
-];
+import BottomNav from "../../layouts/dashboard/BottomNav";
+import { ChatList } from "../../data";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -174,24 +67,6 @@ const StyledChatBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const Chat_Options = [
-  {
-    title: "Archive Chat",
-  },
-  {
-    title: "Mute Notifications",
-  },
-  {
-    title: "Delete Chat",
-  },
-  {
-    title: "Pin Chat",
-  },
-  {
-    title: "Mark as unread",
-  },
-];
-
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
     backgroundColor: "#44b700",
@@ -227,7 +102,7 @@ const ChatElement = ({ img, name, msg, time, unread, online, id }) => {
 
   let isSelected = +selectedChatId === id;
 
-  if(!selectedChatId) {
+  if (!selectedChatId) {
     isSelected = false;
   }
 
@@ -293,39 +168,9 @@ const ChatElement = ({ img, name, msg, time, unread, online, id }) => {
   );
 };
 
-const Profile_Menu = [
-  {
-    title: "Profile",
-    icon: <User />,
-  },
-  {
-    title: "Settings",
-    icon: <Gear />,
-  },
-  {
-    title: "Profile",
-    icon: <SignOut />,
-  },
-];
-
 const Chats = () => {
   const theme = useTheme();
   const isDesktop = useResponsive("up", "md");
-
-  const [selectedTab, setSelectedTab] = React.useState(0);
-
-  const handleChangeTab = (index) => {
-    setSelectedTab(index);
-  };
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const openMenu = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <Box
@@ -340,100 +185,8 @@ const Chats = () => {
       }}
     >
       {!isDesktop && (
-        <Box
-          sx={{
-            zIndex: 10,
-            position: "absolute",
-            bottom: 0,
-            width: "100vw",
-
-            backgroundColor: theme.palette.background.paper,
-            boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
-          }}
-        >
-          <Stack
-            sx={{ width: "100%" }}
-            direction="row"
-            alignItems={"center"}
-            justifyContent="space-between"
-            spacing={2}
-            p={2}
-          >
-            {Main_list.map((el) => {
-              return el.index === selectedTab ? (
-                <Box
-                  sx={{ backgroundColor: "#0162C4", borderRadius: 1.5 }}
-                  p={1}
-                >
-                  <IconButton sx={{ width: "max-content", color: "#ffffff" }}>
-                    {el.icon}
-                  </IconButton>
-                </Box>
-              ) : (
-                <IconButton
-                  onClick={() => {
-                    handleChangeTab(el.index);
-                  }}
-                  sx={{
-                    width: "max-content",
-                    color:
-                      theme.palette.mode === "light"
-                        ? "#080707"
-                        : theme.palette.text.primary,
-                  }}
-                >
-                  {el.icon}
-                </IconButton>
-              );
-            })}
-            <Avatar
-              id="profile-positioned-button"
-              aria-controls={openMenu ? "profile-positioned-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={openMenu ? "true" : undefined}
-              alt={faker.name.fullName()}
-              src={faker.image.avatar()}
-              onClick={handleClick}
-            />
-            <Menu
-              MenuListProps={{
-                "aria-labelledby": "fade-button",
-              }}
-              TransitionComponent={Fade}
-              id="profile-positioned-menu"
-              aria-labelledby="profile-positioned-button"
-              anchorEl={anchorEl}
-              open={openMenu}
-              onClose={handleClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-            >
-              <Box p={1}>
-                <Stack spacing={1}>
-                  {Profile_Menu.map((el) => (
-                    <MenuItem onClick={handleClose}>
-                      <Stack
-                        sx={{ width: 100 }}
-                        direction="row"
-                        alignItems={"center"}
-                        justifyContent="space-between"
-                      >
-                        <span>{el.title}</span>
-                        {el.icon}
-                      </Stack>{" "}
-                    </MenuItem>
-                  ))}
-                </Stack>
-              </Box>
-            </Menu>
-          </Stack>
-        </Box>
+        // Bottom Nav
+        <BottomNav />
       )}
 
       <Stack p={3} spacing={2} sx={{ maxHeight: "100vh" }}>

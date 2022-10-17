@@ -65,6 +65,72 @@ const Actions = [
   },
 ];
 
+const ChatInput = ({ openPicker, setOpenPicker }) => {
+  const [openActions, setOpenActions] = React.useState(false);
+
+  return (
+    <StyledInput
+      fullWidth
+      placeholder="Write a message..."
+      variant="filled"
+      InputProps={{
+        disableUnderline: true,
+        startAdornment: (
+          <Stack sx={{ width: "max-content" }}>
+            <Stack
+              sx={{
+                position: "relative",
+                display: openActions ? "inline-block" : "none",
+              }}
+            >
+              {Actions.map((el) => (
+                <Tooltip placement="right" title={el.title}>
+                  <Fab
+                    onClick={() => {
+                      setOpenActions(!openActions);
+                    }}
+                    sx={{
+                      position: "absolute",
+                      top: -el.y,
+                      backgroundColor: el.color,
+                    }}
+                    aria-label="add"
+                  >
+                    {el.icon}
+                  </Fab>
+                </Tooltip>
+              ))}
+            </Stack>
+
+            <InputAdornment>
+              <IconButton
+                onClick={() => {
+                  setOpenActions(!openActions);
+                }}
+              >
+                <LinkSimple />
+              </IconButton>
+            </InputAdornment>
+          </Stack>
+        ),
+        endAdornment: (
+          <Stack sx={{ position: "relative" }}>
+            <InputAdornment>
+              <IconButton
+                onClick={() => {
+                  setOpenPicker(!openPicker);
+                }}
+              >
+                <Smiley />
+              </IconButton>
+            </InputAdornment>
+          </Stack>
+        ),
+      }}
+    />
+  );
+};
+
 const Footer = () => {
   const theme = useTheme();
 
@@ -72,7 +138,6 @@ const Footer = () => {
 
   const [searchParams] = useSearchParams();
 
-  const [openActions, setOpenActions] = React.useState(false);
   const [openPicker, setOpenPicker] = React.useState(false);
   return (
     <Box
@@ -113,65 +178,8 @@ const Footer = () => {
                 onEmojiSelect={console.log}
               />
             </Box>
-            <StyledInput
-              fullWidth
-              placeholder="Write a message..."
-              variant="filled"
-              InputProps={{
-                disableUnderline: true,
-                startAdornment: (
-                  <Stack sx={{ width: "max-content" }}>
-                    <Stack
-                      sx={{
-                        position: "relative",
-                        display: openActions ? "inline-block" : "none",
-                      }}
-                    >
-                      {Actions.map((el) => (
-                        <Tooltip placement="right" title={el.title}>
-                          <Fab
-                            onClick={() => {
-                              setOpenActions(!openActions);
-                            }}
-                            sx={{
-                              position: "absolute",
-                              top: -el.y,
-                              backgroundColor: el.color,
-                            }}
-                            aria-label="add"
-                          >
-                            {el.icon}
-                          </Fab>
-                        </Tooltip>
-                      ))}
-                    </Stack>
-
-                    <InputAdornment>
-                      <IconButton
-                        onClick={() => {
-                          setOpenActions(!openActions);
-                        }}
-                      >
-                        <LinkSimple />
-                      </IconButton>
-                    </InputAdornment>
-                  </Stack>
-                ),
-                endAdornment: (
-                  <Stack sx={{ position: "relative" }}>
-                    <InputAdornment>
-                      <IconButton
-                        onClick={() => {
-                          setOpenPicker(!openPicker);
-                        }}
-                      >
-                        <Smiley />
-                      </IconButton>
-                    </InputAdornment>
-                  </Stack>
-                ),
-              }}
-            />
+            {/* Chat Input */}
+            <ChatInput openPicker={openPicker} setOpenPicker={setOpenPicker} />
           </Stack>
           <Box
             sx={{

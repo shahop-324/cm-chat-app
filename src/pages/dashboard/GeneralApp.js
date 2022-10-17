@@ -1,10 +1,6 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
-import {
-  Box,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 import NoChat from "../../assets/Images/Illustration/no-chat.svg";
 import { Link, useSearchParams } from "react-router-dom";
@@ -67,8 +63,8 @@ const GeneralApp = () => {
           )}
         </Box>
         {searchParams.get("open") === "true" && (
-        //  Contact Info
-        <Contact />
+          //  Contact Info
+          <Contact />
         )}
       </Stack>
     </>

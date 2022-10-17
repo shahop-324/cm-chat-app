@@ -4,8 +4,8 @@ import { useSearchParams } from 'react-router-dom';
 import { Avatar, Box, Button, Divider, IconButton, Stack, Typography } from '@mui/material';
 import { faker } from '@faker-js/faker';
 import { Bell, CaretRight, Phone, Prohibit, Star, Trash, VideoCamera, X } from 'phosphor-react';
-import { AntSwitch } from '../../layouts/dashboard';
 import useResponsive from '../../hooks/useResponsive';
+import AntSwitch from '../../components/AntSwitch';
 
 const Contact = () => {
 
